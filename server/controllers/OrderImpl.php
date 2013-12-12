@@ -9,7 +9,6 @@ interface OrderMethods{
     public function findAll();
     public function findOrderBy($orderNumber);
     public function createOrder();
-    /* public function updateUser(); */
 }
 
 /**
@@ -27,9 +26,23 @@ class OrderImpl implements orderMethods {
     public function findAll() {
         try 
         {
-            $orders = Order::findAll();
-            if(!$orders) throw new Exception ('empty orders');
-            response_json_data($orders);
+            if(isset($_SERVER['QUERY_STRING']))
+            {
+                if(!isset($_GET['index']) || !isset($_GET['max']))
+                    throw new Exception("Invalid URL parameters");
+                $index = $_GET['index'];
+                $max = $_GET['max'];
+                $orders = Order::findByPaging($index, $max);
+                if(!$orders) throw new Exception ('empty orders');
+                response_json_data($orders);
+            }
+            else
+            {
+                $orders = Order::findAll();
+                if(!$orders) throw new Exception ('empty orders');
+                response_json_data($orders);
+            }
+
         }
         catch(Exception $e) 
         {
@@ -60,9 +73,7 @@ class OrderImpl implements orderMethods {
             //validate user input
             /* $this->validateUserData($input); */
             Order::createOrder($input);
-            echo json_encode(array(
-                'message' => 'create order successfully',
-            ));
+            echo json_encode(array('message' => 'create order successfully'));
         }
         catch(Exception $e) 
         {
@@ -71,39 +82,22 @@ class OrderImpl implements orderMethods {
 
     }
 
-    /* /1* update an user *1/ */
-    /* public function updateUser() { */
-    /*     $input = $this->app->request()->post(); */
-    /*     try */ 
-    /*     { */
-    /*         $this->validateUserData($input); */
-    /*         User::updateUser($input); */
-    /*         response_json_data('update user successfully'); */
-    /*     } */
-    /*     catch(Exception $e) */ 
-    /*     { */
-    /*         response_json_error($this->app, 500, $e->getMessage()); */
-    /*     } */
-    /* } */
-
-
-    /* /1* delete user *1/ */
-    /* public function deleteUser() { */
-    /*     $input = $this->app->request()->post(); */
-    /*     try */ 
-    /*     { */
-    /*         $id = $input['id']; */
-    /*         //validate user id */
-    /*         if(!$id) throw new Exception ('empty user id'); */
-    /*         User::deleteUser($id); */
-    /*         response_json_data('delete user successfully'); */
-    /*     } */
-    /*     catch(Exception $e) */ 
-    /*     { */
-    /*         response_json_error($this->app, 500, $e->getMessage()); */
-    /*     } */
-
-    /* } */
+    /* update an user */
+    public function updateOrder($id) {
+        try 
+        {
+            $request = $this->app->request()->getBody();
+            $input   = json_decode($request);
+            //validate user input
+            /* $this->validateUserData($input); */
+            Order::updateOrder($input, $id);
+            echo json_encode(array('message' => 'update order successfully'));
+        }
+        catch(Exception $e) 
+        {
+            response_json_error($this->app, 500, $e->getMessage());
+        }
+    }
 
     /* /1* validate username and password *1/ */
     /* private function validateUserData($input) */

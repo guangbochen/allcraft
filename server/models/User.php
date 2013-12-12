@@ -3,8 +3,8 @@
 use RedBean_Facade as R;
 
 //speed up the process of recursive query like exportAll and dup
-$schema = R::$duplicationManager->getSchema();
-R::$duplicationManager->setTables($schema);
+/* $schema = R::$duplicationManager->getSchema(); */
+/* R::$duplicationManager->setTables($schema); */
 
 /**
  * this class manages bsaic CRUD method of the users

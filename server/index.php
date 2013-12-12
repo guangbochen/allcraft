@@ -1,13 +1,13 @@
 <?php
-
+date_default_timezone_set('Australia/Sydney');
 // Autoload composer packages
 require './vendor/autoload.php';
 
 // Load slim framework
 $app = new \Slim\Slim();
-/* $app->response()->header('Content-Type', 'application/html'); */
-/* $app->response()->header('Access-Control-Allow-Origin', '*'); */
-/* $app->response()->header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE'); */
+$app->response()->header('Content-Type', 'application/json');
+$app->response()->header('Access-Control-Allow-Origin', '*');
+$app->response()->header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 
 // SETUP ENVIRONMENT
 define('ENVIRONMENT', 'development');

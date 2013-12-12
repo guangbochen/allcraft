@@ -1,6 +1,7 @@
 <?php
 require_once 'controllers/UserImpl.php';
 require_once 'controllers/OrderImpl.php';
+require_once 'controllers/StatusImpl.php';
 
 //SET INDEX PAGE
 $app->get('/', function(){
@@ -52,7 +53,31 @@ $app->get('/orders/:id', function($id) use ($order_controller) {
 $app->post('/orders', function() use ($order_controller) {
     $order_controller->createOrder();
 });
+//update an user
+$app->put('/orders/:id', function($id) use ($order_controller) {
+    $order_controller->updateOrder($id);
+});
 
+/*--------------------------------*/
+/*--------- Status ROUTES ----------*/
+/*--------------------------------*/
+$status_controller = new StatusImpl;
+// find all status
+$app->get('/status',function() use ($status_controller) {
+    $status_controller->findAll();
+});
+//find an status by name
+$app->get('/status/:id', function($id) use ($status_controller) {
+    $status_controller->findStatusBy($id);
+});
+//create an status
+$app->post('/status', function() use ($status_controller) {
+    $status_controller->createStatus();
+});
+//update an status
+$app->put('/status/:id', function($id) use ($status_controller) {
+    $status_controller->updateStatus($id);
+});
 
 
 

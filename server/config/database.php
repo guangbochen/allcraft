@@ -12,13 +12,17 @@ if (defined('ENVIRONMENT'))
 		case 'testing':
         case 'production':
             // Appfog mysql
-            $services_json = json_decode(getenv('VCAP_SERVICES'),true);
-            $mysql_config = $services_json['mysql-5.1'][0]['credentials']; 
-            $db_host = $mysql_config['hostname'];
-            $db_name = $mysql_config['name'];
-            $db_user = $mysql_config['username'];
-            $db_pass = $mysql_config['password'];
-            $db_port = $mysql_config['port'];
+            /* $services_json = json_decode(getenv('VCAP_SERVICES'),true); */
+            /* $mysql_config = $services_json['mysql-5.1'][0]['credentials']; */ 
+            /* $db_host = $mysql_config['hostname']; */
+            /* $db_name = $mysql_config['name']; */
+            /* $db_user = $mysql_config['username']; */
+            /* $db_pass = $mysql_config['password']; */
+            /* $db_port = $mysql_config['port']; */
+            $db_host = 'localhost';
+            $db_name = 'hoochcre_allcraft';
+            $db_user = 'hoochcre_su';
+            $db_pass = 'hooch12345';
             break;
 
         default:
