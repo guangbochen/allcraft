@@ -12,17 +12,25 @@ Class Order {
     {
         $orders = R::findAll('orders');
 
+        foreach ($orders as &$order) {
+            Order::getCompleteOrders($order);
+        }
         //return json array of orders if it is found
         if($orders) return R::exportAll($orders);
 
+        /* echo gettype($ordinary_orders); */
         return null;
     }
+
 
     //this method find a list of orders in pagination
     public static function findByPaging($firstNumber, $maxNumber)
     {
         $orders=R::findAll('orders', 'ORDER BY id LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
 
+        foreach ($orders as &$order) {
+            Order::getCompleteOrders($order);
+        }
         //return json array of orders if it is found
         if($orders) return R::exportAll($orders);
 
@@ -38,6 +46,15 @@ Class Order {
         if($order) return json_decode($order);
 
         return null;
+    }
+
+    private static function getCompleteOrders($order)
+    {
+        if($order->status_id) 
+        {
+            $status = R::findOne('statuses','id = ?', array($order->status_id));
+            $order->ownStatus = $status;
+        }
     }
 
     //this method create new order

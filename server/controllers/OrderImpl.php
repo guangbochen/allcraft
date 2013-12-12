@@ -26,7 +26,7 @@ class OrderImpl implements orderMethods {
     public function findAll() {
         try 
         {
-            if($_SERVER['QUERY_STRING'])
+            if(isset($_SERVER['QUERY_STRING']))
             {
                 if(!($_GET['index']) || !($_GET['max']))
                     throw new Exception("Invalid URL parameters");
