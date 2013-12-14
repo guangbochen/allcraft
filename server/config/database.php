@@ -6,7 +6,7 @@ if (defined('ENVIRONMENT'))
     switch (ENVIRONMENT) { 
         case 'development':
             // Local Mysql
-            $db_host = 'localhost'; $db_name = 'allcraftDB'; $db_user = 'root'; $db_pass = 'root';
+            $db_host = 'localhost'; $db_name = 'allcraftDB'; $db_user = 'root'; $db_pass = '';
             break;
 
 		case 'testing':
@@ -23,6 +23,7 @@ if (defined('ENVIRONMENT'))
             $db_name = 'hoochcre_allcraft';
             $db_user = 'hoochcre_su';
             $db_pass = 'hooch12345';
+            R::freeze(true);
             break;
 
         default:
@@ -31,4 +32,3 @@ if (defined('ENVIRONMENT'))
 }
 
 R::setup("mysql:host=$db_host; dbname=$db_name", $db_user, $db_pass);
-R::freeze(true);

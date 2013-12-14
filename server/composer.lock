@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/gabordemooij/redbean.git",
-                "reference": "41bb293e2bc744c150e4ae30e30fb5083e047f53"
+                "reference": "10a4052e640e9fe3f50c1f3bb4e26ede3b6e2c28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gabordemooij/redbean/zipball/41bb293e2bc744c150e4ae30e30fb5083e047f53",
-                "reference": "41bb293e2bc744c150e4ae30e30fb5083e047f53",
+                "url": "https://api.github.com/repos/gabordemooij/redbean/zipball/10a4052e640e9fe3f50c1f3bb4e26ede3b6e2c28",
+                "reference": "10a4052e640e9fe3f50c1f3bb4e26ede3b6e2c28",
                 "shasum": ""
             },
             "require": {
@@ -46,24 +46,27 @@
                 "Object Relational Mapping",
                 "orm"
             ],
-            "time": "2013-10-30 22:13:02"
+            "time": "2013-12-11 20:27:24"
         },
         {
             "name": "slim/slim",
-            "version": "2.2.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim.git",
-                "reference": "b8181de1112a1e2f565b40158b621c34ded38053"
+                "reference": "ff7d7148848fa4f45712984d7b91ac3cbced586b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeguy/Slim/zipball/b8181de1112a1e2f565b40158b621c34ded38053",
-                "reference": "b8181de1112a1e2f565b40158b621c34ded38053",
+                "url": "https://api.github.com/repos/codeguy/Slim/zipball/ff7d7148848fa4f45712984d7b91ac3cbced586b",
+                "reference": "ff7d7148848fa4f45712984d7b91ac3cbced586b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
+            },
+            "suggest": {
+                "ext-mcrypt": "Required for HTTP cookie encryption"
             },
             "type": "library",
             "autoload": {
@@ -89,7 +92,7 @@
                 "rest",
                 "router"
             ],
-            "time": "2012-12-13 02:15:50"
+            "time": "2013-11-29 20:33:36"
         }
     ],
     "packages-dev": [

@@ -70,10 +70,7 @@ class OrderImpl implements orderMethods {
         {
             $request = $this->app->request()->getBody();
             $input   = json_decode($request);
-            //validate user input
-            /* $this->validateUserData($input); */
-            Order::createOrder($input);
-            echo json_encode(array('message' => 'create order successfully'));
+            echo json_encode (Order::createOrder($input));
         }
         catch(Exception $e) 
         {

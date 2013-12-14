@@ -60,6 +60,7 @@ Class Order {
     //this method create new order
     public static function createOrder($input) 
     {
+        $orders = array();
         R::begin();
         try
         {
@@ -76,9 +77,13 @@ Class Order {
             else //is array of object
             {
                 foreach($input as $order) 
-                    Order::dispenseNewOrder($order, $date);
+                {
+                    array_push ($orders, Order::dispenseNewOrder($order, $date));
+                }
             }
             R::commit();
+
+            return R::exportAll ($orders);
         }
         catch(Exception $e) {
             R::rollback();
@@ -96,6 +101,7 @@ Class Order {
 
         //stores the status into order
         R::store($order);
+        return $order;
     }
 
     //this method update the order
