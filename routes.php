@@ -41,19 +41,21 @@ $app->get('/user/:id', function($id) use ($user_controller) {
 /*--------- USER ROUTES ----------*/
 /*--------------------------------*/
 $order_controller = new OrderImpl;
-// find all users
+
+// GET orders
 $app->get('/orders',function() use ($order_controller) {
-    $order_controller->findAll();
+    $order_controller->findOrders();
 });
+
 //find an user by name
 $app->get('/orders/:id', function($id) use ($order_controller) {
     $order_controller->findOrderBy($id);
 });
-//create an user
+//create an order
 $app->post('/orders', function() use ($order_controller) {
     $order_controller->createOrder();
 });
-//update an user
+//update an order
 $app->put('/orders/:id', function($id) use ($order_controller) {
     $order_controller->updateOrder($id);
 });
@@ -78,7 +80,4 @@ $app->post('/status', function() use ($status_controller) {
 $app->put('/status/:id', function($id) use ($status_controller) {
     $status_controller->updateStatus($id);
 });
-
-
-
 

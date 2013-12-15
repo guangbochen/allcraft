@@ -15,6 +15,7 @@ Class Order {
         foreach ($orders as &$order) {
             Order::getCompleteOrders($order);
         }
+
         //return json array of orders if it is found
         if($orders) return R::exportAll($orders);
 
@@ -46,6 +47,47 @@ Class Order {
         if($order) return json_decode($order);
 
         return null;
+    }
+
+    // Find orders at a specific date created
+    public static function findCreatedAt($date, $limit, $offset)
+    {
+        // offset = 0, limit = 2 -> return 1,2
+        // offset = 2, limit = 2 -> return 3,4
+        // The offset increases based on limit
+        $orders = R::find (
+            'orders', 
+            'created_at LIKE ? ORDER BY id LIMIT ?, ?', 
+            array(
+                "%$date%", 
+                (int) $offset,
+                (int)$limit
+            )
+        );
+
+        if ($orders)
+            return json_encode (R::exportAll ($orders));
+        else
+            throw new Exception ('Orders not found');
+    }
+
+    // Find orders before a provided date created
+    public static function findCreatedBefore ($date, $limit, $offset)
+    {
+        $orders = R::find (
+            'orders', 
+            'DATE(created_at) < ? ORDER BY id LIMIT ?, ?',
+            array (
+                $date,
+                (int)$offset,
+                (int)$limit
+            )
+        );
+
+        if ($orders)
+            return json_encode(R::exportAll ($orders));
+        else
+            throw new Exception ('Orders not found');
     }
 
     private static function getCompleteOrders($order)

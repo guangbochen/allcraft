@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set('Australia/Sydney');
 // Autoload composer packages
 require './vendor/autoload.php';
