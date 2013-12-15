@@ -22,3 +22,4 @@ limit=2 will return list of item from 1,2)
 
 6. PUT ***/orders/:id***
 
+# Change DB password back to root if you want to merge this branch to master branch
