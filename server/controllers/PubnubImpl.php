@@ -4,7 +4,7 @@ require_once 'helpers/json_helper.php';
 /*
  * PubNub Real-time cloud push API
  */
-class PubnubImpl {
+class PubNubImpl {
     private $app;
     private $pubnub;
 
@@ -12,7 +12,7 @@ class PubnubImpl {
     public function __construct() {
         $this->app = \Slim\Slim::getInstance();
 
-        //set up PubNub Push API
+        //initlise PubNub Push API
         $this->pubnub = new \Pubnub\Pubnub(
             "pub-c-8021207d-c906-4f21-ac84-7d5773c9255b",  ## PUBLISH_KEY
             "sub-c-077f7902-66ad-11e3-b1d4-02ee2ddab7fe",  ## SUBSCRIBE_KEY
@@ -22,7 +22,7 @@ class PubnubImpl {
     }
 
     /* 
-     * this method push message to the cloud API
+     * this method push message to the subscribe cloud API
      */
     public function push() {
         try 

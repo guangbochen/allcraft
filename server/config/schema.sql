@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS messages(
     id       INTEGER NOT NULL AUTO_INCREMENT,
     user_id     INTEGER NOT NULL,
     description VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMP NOT NULL,
     PRIMARY KEY(id)
 );
 

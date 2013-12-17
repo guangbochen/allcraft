@@ -86,7 +86,7 @@ $app->put('/status/:id', function($id) use ($statusImpl) {
 /*--------------------------------*/
 $pubNubImpl = new PubNubImpl;
 // find all status
-$app->get('/push',function() use ($pubNubImpl) {
+$app->post('/push',function() use ($pubNubImpl) {
     $pubNubImpl->push();
 });
 

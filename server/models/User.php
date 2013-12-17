@@ -2,9 +2,9 @@
 // define database shcema
 use RedBean_Facade as R;
 
-//speed up the process of recursive query like exportAll and dup
-/* $schema = R::$duplicationManager->getSchema(); */
-/* R::$duplicationManager->setTables($schema); */
+/* //speed up the process of recursive query like exportall and dup */
+/* /1* $schema = R::$duplicationManager->getSchema(); *1/ */
+/* /1* R::$duplicationManager->setTables($schema); *1/ */
 
 /**
  * this class manages bsaic CRUD method of the users
