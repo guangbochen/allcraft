@@ -38,26 +38,27 @@ Class Order {
         return null;
     }
 
-    /* find an order by name */
-    public static function findOrder($orderNumber) 
+    // Find an order by id 
+    public static function findOrderById($id) 
     {
-        $order = R::findOne('orders','orderNumber = ?', array($orderNumber));
+        $order = R::findOne('orders','id = ?', array($id));
 
         //return order if is found
-        if($order) return json_decode($order);
-
-        return null;
+        if($order) 
+            return $order;
+        else
+            throw new Exception ('Order not found');
     }
 
     // Find orders at a specific date created
-    public static function findCreatedAt($date, $limit, $offset)
+    public static function findCreatedAt($date, $limit = 5, $offset = 0)
     {
         // offset = 0, limit = 2 -> return 1,2
         // offset = 2, limit = 2 -> return 3,4
         // The offset increases based on limit
         $orders = R::find (
             'orders', 
-            'created_at LIKE ? ORDER BY id LIMIT ?, ?', 
+            'created_at LIKE ? ORDER BY id DESC LIMIT ?, ?', 
             array(
                 "%$date%", 
                 (int) $offset,
@@ -72,11 +73,11 @@ Class Order {
     }
 
     // Find orders before a provided date created
-    public static function findCreatedBefore ($date, $limit, $offset)
+    public static function findCreatedBefore ($date, $limit = 5, $offset = 0)
     {
         $orders = R::find (
             'orders', 
-            'DATE(created_at) < ? ORDER BY id LIMIT ?, ?',
+            'DATE(created_at) < ? ORDER BY id DESC LIMIT ?, ?',
             array (
                 $date,
                 (int)$offset,
@@ -107,10 +108,12 @@ Class Order {
         try
         {
             //check input data is not empty
-            if(!$input) throw new exception("empty input data");
+            if(!$input) 
+                throw new exception('Empty input data');
 
             //get the current date in yyyy_mm_dd hh:ii:ss format
             $date = date('Y-m-d H:i:s', strtotime('now'));
+
             //if is an object create the object
             if(!is_array($input))
             {
@@ -150,23 +153,25 @@ Class Order {
     public static function updateOrder($input, $id) 
     {
         R::begin();
-        try
+        if(!$input || !$id) 
+            throw new Exception('Empty input data');
+        $order = R::findOne('orders','id = ?', array($id));
+        if($order) 
         {
-            if(!$input || !$id) throw new exception("empty input data");
-            $order = R::findOne('orders','id = ?', array($id));
-            if($order) {
-                $order->import($input);
-                //update the update date & time
-                $date = date('Y-m-d H:i:s', strtotime('now'));
-                $order->updated_at = $date;
-                R::store($order);
-            }
+            $order->import($input);
+            //update the update date & time
+            $date = date('Y-m-d H:i:s', strtotime('now'));
+            $order->updated_at = $date;
+            R::store($order);
             R::commit();
+
+            return $order;
         }
-        catch(Exception $e) {
+        else
+        {
             R::rollback();
-            throw new Exception($e->getMessage());
+            throw new Exception('Order Not Found');
         }
     }
-
 }
+

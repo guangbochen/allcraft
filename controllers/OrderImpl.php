@@ -2,9 +2,6 @@
 require_once 'helpers/json_helper.php';
 require_once 'models/Order.php';
 
-/**
- * this class implement methods that is related to users
- */
 class OrderImpl
 {
     private $app;
@@ -45,14 +42,12 @@ class OrderImpl
         }
     }
 
-    /* returns an user by name */
-    public function findOrderBy($orderNumber) 
+    // Find Order by Id
+    public function findOrderBy($id) 
     {
         try 
         {
-            $order = Order::findOrder($orderNumber);
-            if(!$order) throw new Exception ('order not found');
-            response_json_data($order);
+            echo Order::findOrderById($id);
         }
         catch(Exception $e) 
         {
@@ -73,7 +68,6 @@ class OrderImpl
         {
             response_json_error($this->app, 500, $e->getMessage());
         }
-
     }
 
     /* update an user */
@@ -85,8 +79,8 @@ class OrderImpl
             $input   = json_decode($request);
             //validate user input
             /* $this->validateUserData($input); */
-            Order::updateOrder($input, $id);
-            echo json_encode(array('message' => 'update order successfully'));
+            echo Order::updateOrder($input, $id);
+            /* echo json_encode(array('message' => 'update order successfully')); */
         }
         catch(Exception $e) 
         {

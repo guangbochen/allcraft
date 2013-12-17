@@ -65,19 +65,19 @@ $app->put('/orders/:id', function($id) use ($order_controller) {
 /*--------------------------------*/
 $status_controller = new StatusImpl;
 // find all status
-$app->get('/status',function() use ($status_controller) {
+$app->get('/statuses',function() use ($status_controller) {
     $status_controller->findAll();
 });
 //find an status by name
-$app->get('/status/:id', function($id) use ($status_controller) {
+$app->get('/statuses/:id', function($id) use ($status_controller) {
     $status_controller->findStatusBy($id);
 });
 //create an status
-$app->post('/status', function() use ($status_controller) {
+$app->post('/statuses', function() use ($status_controller) {
     $status_controller->createStatus();
 });
 //update an status
-$app->put('/status/:id', function($id) use ($status_controller) {
+$app->put('/statuses/:id', function($id) use ($status_controller) {
     $status_controller->updateStatus($id);
 });
 
