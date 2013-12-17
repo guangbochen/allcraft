@@ -3,7 +3,7 @@ require_once 'helpers/json_helper.php';
 require_once 'models/Order.php';
 
 /**
- * this is interface for user implementation
+ * this is interface for order implementation
  */
 interface OrderMethods{
     public function findAll();
@@ -12,7 +12,7 @@ interface OrderMethods{
 }
 
 /**
- * this class implement methods that is related to users
+ * this class implement methods that is required to order
  */
 class OrderImpl implements orderMethods {
     private $app;
@@ -22,7 +22,9 @@ class OrderImpl implements orderMethods {
         $this->app = \Slim\Slim::getInstance();
     }
 
-    /* returns all users */
+    /* 
+     * returns a list of order (with pagination if contains query parameters)
+     */
     public function findAll() {
         try 
         {
@@ -50,11 +52,14 @@ class OrderImpl implements orderMethods {
         }
     }
 
-    /* returns an user by name */
-    public function findOrderBy($orderNumber) {
+    /* 
+     * find and returns an order by orderNumber 
+     * @id, order id
+     * */
+    public function findOrderBy($id) {
         try 
         {
-            $order = Order::findOrder($orderNumber);
+            $order = Order::findOrder($id);
             if(!$order) throw new Exception ('order not found');
             response_json_data($order);
         }
@@ -64,7 +69,7 @@ class OrderImpl implements orderMethods {
         }
     }
 
-    /* create an user */
+    /* create an new order */
     public function createOrder() {
         try 
         {
@@ -82,7 +87,10 @@ class OrderImpl implements orderMethods {
 
     }
 
-    /* update an user */
+    /* 
+     * update an eixsting order 
+     * @id, order id
+     */
     public function updateOrder($id) {
         try 
         {

@@ -1,6 +1,13 @@
 {
+    "repositories" : {
+        "pubnub" : {
+            "type":"git",
+            "url":"https://github.com/pubnub/php-composer"
+            }
+    },
     "require": {
         "slim/slim": "2.*",
-        "gabordemooij/redbean": "dev-master"
+        "gabordemooij/redbean": "dev-master",
+        "pubnub/pubnub": "dev-master"
         }
 }

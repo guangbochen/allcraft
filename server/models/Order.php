@@ -7,7 +7,7 @@ R::$duplicationManager->setTables($schema);
 
 Class Order {
 
-    //this method returns list of orders
+    /* this method returns list of orders */
     public static function findAll() 
     {
         $orders = R::findAll('orders');
@@ -23,7 +23,7 @@ Class Order {
     }
 
 
-    //this method find a list of orders in pagination
+    /* this method find a list of orders in pagination */
     public static function findByPaging($firstNumber, $maxNumber)
     {
         $orders=R::findAll('orders', 'ORDER BY id LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
@@ -37,10 +37,10 @@ Class Order {
         return null;
     }
 
-    /* find an order by name */
-    public static function findOrder($orderNumber) 
+    /* find an order by id */
+    public static function findOrder($id) 
     {
-        $order = R::findOne('orders','orderNumber = ?', array($orderNumber));
+        $order = R::findOne('orders','id = ?', array($id));
 
         //return order if is found
         if($order) return json_decode($order);
@@ -48,6 +48,7 @@ Class Order {
         return null;
     }
 
+    /* this method returns a full order with its mapped entities */
     private static function getCompleteOrders($order)
     {
         if($order->status_id) 
@@ -57,7 +58,7 @@ Class Order {
         }
     }
 
-    //this method create new order
+    /* this method create new order */
     public static function createOrder($input) 
     {
         R::begin();
@@ -86,7 +87,7 @@ Class Order {
         }
     }
 
-    //this method dispense new order into orders table
+    /* this method dispense new order into orders table */
     private static function dispenseNewOrder($input, $date) 
     {
         $order = R::dispense('orders');
@@ -98,7 +99,7 @@ Class Order {
         R::store($order);
     }
 
-    //this method update the order
+    /* this method update the order */
     public static function updateOrder($input, $id) 
     {
         R::begin();

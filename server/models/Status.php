@@ -3,7 +3,7 @@
 use RedBean_Facade as R;
 
 /**
- * this class manages bsaic CRUD method of the statuses
+ * this class manages basic CRUD method of the statuses
  **/
 Class Status {
 
@@ -17,7 +17,7 @@ Class Status {
         return null;
     }
     
-    /* find an status by name */
+    /* find an status by id */
     public static function findStatus($id) {
         $status = R::findOne('statuses','id = ?', array($id));
 
@@ -27,6 +27,8 @@ Class Status {
         return null;
     }
 
+
+    /* this method create a new status */
     public static function createStatus($input)
     {
         R::begin();
@@ -45,7 +47,7 @@ Class Status {
 
     }
 
-    /* update an  */
+    /* this method update the status by id */
     public static function updateStatus($input, $id) {
         R::begin();
         try
@@ -62,7 +64,7 @@ Class Status {
         }
     }
 
-    /* delete an status */
+    /* this method delete an status */
     public static function deleteStatus($id) {
         R::begin();
         try

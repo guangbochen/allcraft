@@ -59,10 +59,10 @@ Class User {
         {
             $user = R::findOne('users','id = ?', array($input['id']));
             $user->import($input);
-            //using a selection filter to ignore extra input data (e.g gender, which is not included in the database)
-            //otherwise the import will auto loading all the input data and throw an new exception if it contains any extra value.
-            //And the transaction will automatically rollback to protect data integrity,
-            //however this does not apply any form of validation to the bean and it should be done in the model or controller.
+            //using a selection filter to ignore extra input data (e.g gender, which is not included in the database schema)
+            //otherwise the above import all method will import all the input data and throws an undefined valueable exception 
+            //if it contains any extra fields.  And the transaction will automatically rollback to protect data integrity,
+            //however this does not apply any form of validation to the input and it should be done somewhere else like controller.
             /* $user->import($input, 'id, name, password'); */
             R::store($user);
             R::commit();
