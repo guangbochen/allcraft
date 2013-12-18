@@ -3,33 +3,44 @@ CREATE DATABASE IF NOT EXISTS allcraftDB;
 USE allcraftDB;
 
 CREATE TABLE IF NOT EXISTS users(
-    id       INTEGER NOT NULL AUTO_INCREMENT,
-    firstName VARCHAR(20) NOT NULL,
-    lastName  VARCHAR(20) NOT NULL,
-    userName  VARCHAR(20) NOT NULL,
-    password  VARCHAR(20) NOT NULL,
+    id        INTEGER NOT NULL AUTO_INCREMENT,
+    firstName VARCHAR(200) NOT NULL,
+    lastName  VARCHAR(200) NOT NULL,
+    userName  VARCHAR(200) NOT NULL,
+    password  VARCHAR(200) NOT NULL,
     email     VARCHAR(200) NOT NULL,
     PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS messages(
-    id       INTEGER NOT NULL AUTO_INCREMENT,
-    user_id     INTEGER NOT NULL,
+    id          INTEGER NOT NULL AUTO_INCREMENT,
+    username    VARCHAR(200) NOT NULL,
+    is_creator  BOOLEAN NOT NULL,
     description VARCHAR(255) NOT NULL,
     created_at  TIMESTAMP NOT NULL,
     PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS subscribers(
+    id          INTEGER NOT NULL AUTO_INCREMENT,
+    message_id  INTEGER NOT NULL,
+    assigned_user    VARCHAR(255) NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (message_id) REFERENCES messages(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS statuses(
-    id     INTEGER NOT NULL AUTO_INCREMENT,
-    status VARCHAR(255) NOT NULL,
+    id          INTEGER NOT NULL AUTO_INCREMENT,
+    status      VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS orders(
-    id       INTEGER NOT NULL AUTO_INCREMENT,
-    status_id         INTEGER,
+    id                INTEGER NOT NULL AUTO_INCREMENT,
+    status_id         INTEGER NULL,
     order_number      VARCHAR(255) NULL,
     job               VARCHAR(255) NULL,
     customer          VARCHAR(255) NULL,

@@ -10,14 +10,10 @@ use RedBean_Facade as R;
  * this class manages bsaic CRUD method of the users
  **/
 Class User {
-    private $name;
-    private $password;
-    private $role;
-
 
     /* returns all users */
     public static function findAll() {
-        $users = R::findAll('users'); 
+        $users = R::findAll('users');
 
         //return array of users if is found
         if($users) return R::exportAll($users);

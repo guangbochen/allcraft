@@ -12,7 +12,7 @@ Class Order {
     {
         $orders = R::findAll('orders');
 
-        foreach ($orders as &$order) {
+        foreach ($orders as $order) {
             Order::getCompleteOrders($order);
         }
         //return json array of orders if it is found
@@ -28,7 +28,7 @@ Class Order {
     {
         $orders=R::findAll('orders', 'ORDER BY id LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
 
-        foreach ($orders as &$order) {
+        foreach ($orders as $order) {
             Order::getCompleteOrders($order);
         }
         //return json array of orders if it is found

@@ -1,5 +1,6 @@
 <?php
 require_once 'helpers/json_helper.php';
+require_once 'models/Message.php';
 
 /*
  * PubNub Real-time cloud push API
@@ -9,7 +10,8 @@ class PubNubImpl {
     private $pubnub;
 
     /* constructor */
-    public function __construct() {
+    public function __construct() 
+    {
         $this->app = \Slim\Slim::getInstance();
 
         //initlise PubNub Push API
@@ -21,6 +23,32 @@ class PubNubImpl {
         );
     }
 
+    /* this method find all the messages */
+    public function findAll()
+    {
+        try 
+        {
+            $messages = Message::findAll();
+            response_json_data($messages);
+        }
+        catch(Exception $e) {
+            response_json_error($this->app, 500, $e->getMessage());
+        }
+    }
+
+    /* this method find a specific id */
+    public function findMessage($id)
+    {
+        try {
+            $message = Message::findMessage($id);
+            response_json_data($message);
+        }
+        catch(Exception $e) {
+            response_json_error($this->app, 500, $e->getMessage());
+        }
+    }
+
+
     /* 
      * this method push message to the subscribe cloud API
      */
@@ -31,20 +59,22 @@ class PubNubImpl {
             $request = $this->app->request()->getBody();
             $input   = json_decode($request);
 
-            //generate broadcast message
-            $date = date('Y-m-d H:i:s', strtotime('now'));
-            $message = 'New order has created on ' . $date;
+            //save messages into database
+            $message_id = Message::createMessage($input);
 
-            // send the message
+            //generate broadcast message
+            $message = array();
+            $message = Message::findMessage($message_id);
+
+            //send broadcast message
             $info = $this->pubnub->publish(array(
                 'channel' => 'printee_notification', ## REQUIRED Channel to Send
                 'message' => $message   ## REQUIRED Message String/Array
             ));
 
-            response_json_data($input);
+            response_json_data($message);
         }
-        catch(Exception $e) 
-        {
+        catch(Exception $e) {
             response_json_error($this->app, 500, $e->getMessage());
         }
     }
