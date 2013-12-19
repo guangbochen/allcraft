@@ -44,7 +44,7 @@ $app->get('/user/:id', function($id) use ($userImpl) {
 $orderImpl = new OrderImpl;
 // find orders
 $app->get('/orders',function() use ($orderImpl) {
-    $orderImpl->findAll();
+    $orderImpl->findOrders();
 });
 //find specific order
 $app->get('/orders/:id', function($id) use ($orderImpl) {

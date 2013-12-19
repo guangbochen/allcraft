@@ -3,48 +3,43 @@ require_once 'helpers/json_helper.php';
 require_once 'models/Order.php';
 
 /**
- * this is interface for order implementation
- */
-interface OrderMethods{
-    public function findAll();
-    public function findOrderBy($orderNumber);
-    public function createOrder();
-}
-
-/**
  * this class implement methods that is required to order
  */
-class OrderImpl implements orderMethods {
+class OrderImpl 
+{
     private $app;
 
     /* constructor */
-    public function __construct() {
+    public function __construct() 
+    {
         $this->app = \Slim\Slim::getInstance();
     }
 
     /* 
-     * returns a list of order (with pagination if contains query parameters)
+     * GET: \orders
+     * GET: \orders?created_at=:date&limit=:limit&offset=:offset
+     * GET: \orders?created_before=:date&limit=:limit&offset=:offset
      */
-    public function findAll() {
+    public function findOrders() 
+    {
         try 
         {
-            if(isset($_SERVER['QUERY_STRING']))
+            $params = $this->app->request()->params();
+            if($params) 
             {
-                if(!($_GET['index']) || !($_GET['max']))
-                    throw new Exception("Invalid URL parameters");
-                $index = $_GET['index'];
-                $max = $_GET['max'];
-                $orders = Order::findByPaging($index, $max);
-                if(!$orders) throw new Exception ('empty orders');
-                response_json_data($orders);
-            }
-            else
-            {
-                $orders = Order::findAll();
-                if(!$orders) throw new Exception ('empty orders');
-                response_json_data($orders);
-            }
+                $fields = array_to_json($params);
+                $limit  = isset($fields->limit) ? $fields->limit : 5; 
+                $offset = isset($fields->offset) ? $fields->offset : 0;
 
+                if (isset($fields->created_at))
+                    echo Order::findCreatedAt($fields->created_at, $limit, $offset);
+                if (isset($fields->created_before))
+                    echo Order::findCreatedBefore($fields->created_before, $limit, $offset);
+            }
+            else 
+            {
+                echo json_encode (Order::findAll());
+            }
         }
         catch(Exception $e) 
         {
@@ -56,7 +51,8 @@ class OrderImpl implements orderMethods {
      * find and returns an order by orderNumber 
      * @id, order id
      */
-    public function findOrderBy($id) {
+    public function findOrderBy($id) 
+    {
         try 
         {
             $order = Order::findOrder($id);
