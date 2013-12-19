@@ -3,7 +3,7 @@ require_once 'helpers/json_helper.php';
 require_once 'models/User.php';
 
 /**
- * this is interface for user implementation
+ * this is interface for for UserImpl class
  */
 interface UserMethods{
     public function findAll();

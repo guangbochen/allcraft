@@ -1,6 +1,8 @@
 <?php
-// define database shcema
 use RedBean_Facade as R;
+//speed up the process of recursive query like exportall and dup
+$schema = R::$duplicationManager->getSchema();
+R::$duplicationManager->setTables($schema);
 
 /**
  * this class manages basic CRUD method of the statuses

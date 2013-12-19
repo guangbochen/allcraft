@@ -1,11 +1,13 @@
 <?php
-// define database shcema
 use RedBean_Facade as R;
 require_once 'models/Subscriber.php';
 //speed up the process of recursive query like exportAll and dup
 $schema = R::$duplicationManager->getSchema();
 R::$duplicationManager->setTables($schema);
 
+/* 
+ * this class manages basic CRUD methods of message 
+ */
 Class Message {
 
     /* this method returns list of messages */
@@ -19,8 +21,6 @@ Class Message {
 
         //return json array of messages if it is found
         return R::exportAll($messages);
-
-        return null;
     }
 
 
@@ -31,17 +31,14 @@ Class Message {
         if($message) Message::getCompleteMessage($message);
 
         return R::exportAll($message);
-
     }
 
     /* this method reterives a complete messages with its owned subscribers */
     private static function getCompleteMessage($message)
     {
         $subscribers = R::findAll('subscribers', 'message_id = ?', array($message->id));
-        /* var_dump($subscribers); */
         if($subscribers) $message->ownSubscribers = $subscribers;
     }
-
 
     /* this method create new message */
     public static function createMessage($input) 
@@ -54,12 +51,10 @@ Class Message {
 
             //get the current date in yyyy_mm_dd hh:ii:ss format
             $date = date('Y-m-d H:i:s', strtotime('now'));
-
-            //if is an object create the object
             $message_id = Message::dispenseNewMessage($input, $date);
-            R::commit();
 
-            return $message_id;
+            R::commit();
+            return $message_id; ## return new generated message id
         }
         catch(Exception $e) {
             R::rollback();
@@ -67,7 +62,7 @@ Class Message {
         }
     }
 
-    /* this method dispense new order into orders table */
+    /* this method dispense new message and add it into database*/
     private static function dispenseNewMessage($input, $date)
     {
         $message = R::dispense('messages');
@@ -75,7 +70,9 @@ Class Message {
         $message->created_at = $date;
 
         //add description to the message
-        $desc = isset($input->number_of_orders) ? $input->number_of_orders . ' new orders has been created' :  'Order has been updated';
+        $desc = isset($input->number_of_orders) ? 
+            $input->number_of_orders . ' new orders has been created by ' . $input->username 
+            :  'Order has been updated by ' . $input->username;
         $message->description = $desc;
 
         //stores message

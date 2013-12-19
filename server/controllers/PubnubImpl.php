@@ -3,7 +3,8 @@ require_once 'helpers/json_helper.php';
 require_once 'models/Message.php';
 
 /*
- * PubNub Real-time cloud push API
+ * This class manages basic CRUD methods of Messages and it pushes a broadcast
+ * messages to its client when new messages is created
  */
 class PubNubImpl {
     private $app;
@@ -13,7 +14,6 @@ class PubNubImpl {
     public function __construct() 
     {
         $this->app = \Slim\Slim::getInstance();
-
         //initlise PubNub Push API
         $this->pubnub = new \Pubnub\Pubnub(
             "pub-c-8021207d-c906-4f21-ac84-7d5773c9255b",  ## PUBLISH_KEY
@@ -36,7 +36,7 @@ class PubNubImpl {
         }
     }
 
-    /* this method find a specific id */
+    /* this method find a specific message by id */
     public function findMessage($id)
     {
         try {
@@ -48,9 +48,9 @@ class PubNubImpl {
         }
     }
 
-
     /* 
-     * this method push message to the subscribe cloud API
+     * this method create new message and push the message 
+     * to its subscribed client through Pubnub cloud API
      */
     public function push() {
         try 

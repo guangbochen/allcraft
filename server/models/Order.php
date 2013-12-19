@@ -1,10 +1,12 @@
 <?php
-// define database shcema
 use RedBean_Facade as R;
 //speed up the process of recursive query like exportAll and dup
 $schema = R::$duplicationManager->getSchema();
 R::$duplicationManager->setTables($schema);
 
+/* 
+ * this class manages basic CRUD implementation of the order 
+ */
 Class Order {
 
     /* this method returns list of orders */
@@ -21,7 +23,6 @@ Class Order {
         /* echo gettype($ordinary_orders); */
         return null;
     }
-
 
     /* this method find a list of orders in pagination */
     public static function findByPaging($firstNumber, $maxNumber)

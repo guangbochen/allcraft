@@ -120,5 +120,3 @@ class StatusImpl implements statusMethods {
 
 }
 
-
-

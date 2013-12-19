@@ -55,7 +55,7 @@ class OrderImpl implements orderMethods {
     /* 
      * find and returns an order by orderNumber 
      * @id, order id
-     * */
+     */
     public function findOrderBy($id) {
         try 
         {

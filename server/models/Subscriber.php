@@ -1,6 +1,9 @@
 <?php
 use RedBean_Facade as R;
 
+/**
+ * This class manages basic CRUD methods to message subscriber
+ */
 Class Subscriber {
 
     /* 
