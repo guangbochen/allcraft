@@ -13,10 +13,22 @@ CREATE TABLE IF NOT EXISTS users(
 );
 
 CREATE TABLE IF NOT EXISTS messages(
-    id       INTEGER NOT NULL AUTO_INCREMENT,
-    user_id     INTEGER NOT NULL,
+    id          INTEGER NOT NULL AUTO_INCREMENT,
+    username    VARCHAR(200) NOT NULL,
+    is_creator  BOOLEAN NOT NULL,
     description VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMP NOT NULL,
     PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS subscribers(
+    id          INTEGER NOT NULL AUTO_INCREMENT,
+    message_id  INTEGER NOT NULL,
+    assigned_user    VARCHAR(255) NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (message_id) REFERENCES messages(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS statuses(

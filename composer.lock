@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2761593f116769e2299861a4c87c5eb2",
+    "hash": "8aeff0f64d23e3dda50d30fed03a8617",
     "packages": [
         {
             "name": "gabordemooij/redbean",
@@ -47,6 +47,59 @@
                 "orm"
             ],
             "time": "2013-12-11 20:27:24"
+        },
+        {
+            "name": "pubnub/pubnub",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pubnub/php-composer.git",
+                "reference": "ab4aa92cc262520f6857252f709a3a44c608e2fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pubnub/php-composer/zipball/ab4aa92cc262520f6857252f709a3a44c608e2fa",
+                "reference": "ab4aa92cc262520f6857252f709a3a44c608e2fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Pubnub\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Medvedev",
+                    "email": "gektor1@gmail.com"
+                },
+                {
+                    "name": "Victor Kislichenko",
+                    "email": "dofer@bigmir.net"
+                },
+                {
+                    "name": "PubNub Support",
+                    "email": "support@pubnub.com"
+                }
+            ],
+            "description": "The Only Global Network For Real-Time Data -- PubNub!",
+            "homepage": "http://www.pubnub.com/",
+            "keywords": [
+                "ajax",
+                "api",
+                "push",
+                "real time",
+                "real-time",
+                "realtime"
+            ],
+            "time": "2013-07-16 21:18:27"
         },
         {
             "name": "slim/slim",
@@ -103,7 +156,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "gabordemooij/redbean": 20
+        "gabordemooij/redbean": 20,
+        "pubnub/pubnub": 20
     },
     "platform": [
 

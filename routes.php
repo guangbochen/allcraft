@@ -2,6 +2,7 @@
 require_once 'controllers/UserImpl.php';
 require_once 'controllers/OrderImpl.php';
 require_once 'controllers/StatusImpl.php';
+require_once 'controllers/PubNubImpl.php';
 
 //SET INDEX PAGE
 $app->get('/', function(){
@@ -81,3 +82,19 @@ $app->put('/statuses/:id', function($id) use ($status_controller) {
     $status_controller->updateStatus($id);
 });
 
+/*--------------------------------*/
+/*--------- Pubnub Routes ---------*/
+/*--------------------------------*/
+$pubNubImpl = new PubNubImpl;
+//get push message 
+$app->get('/messages',function() use ($pubNubImpl) {
+    $pubNubImpl->findAll();
+});
+//find an message by id
+$app->get('/messages/:id', function($id) use ($pubNubImpl) {
+    $pubNubImpl->findMessage($id);
+});
+//broadcast push notification
+$app->post('/push',function() use ($pubNubImpl) {
+    $pubNubImpl->push();
+});
