@@ -55,9 +55,7 @@ class OrderImpl
     {
         try 
         {
-            $order = Order::findOrder($id);
-            if(!$order) throw new Exception ('order not found');
-            response_json_data($order);
+            echo Order::findOrder($id);
         }
         catch(Exception $e) 
         {
@@ -71,10 +69,7 @@ class OrderImpl
         {
             $request = $this->app->request()->getBody();
             $input   = json_decode($request);
-            //validate user input
-            /* $this->validateUserData($input); */
-            Order::createOrder($input);
-            echo json_encode(array('message' => 'create order successfully'));
+            echo json_encode (Order::createOrder($input));
         }
         catch(Exception $e) 
         {
@@ -94,13 +89,24 @@ class OrderImpl
             $input   = json_decode($request);
             //validate user input
             /* $this->validateUserData($input); */
-            Order::updateOrder($input, $id);
-            echo json_encode(array('message' => 'update order successfully'));
+            echo Order::updateOrder($input, $id);
         }
         catch(Exception $e) 
         {
             response_json_error($this->app, 500, $e->getMessage());
         }
+    }
+
+    public function getLastOrderNumber() {
+        try 
+        {
+            echo Order::findLastOrder();
+        }
+        catch(Exception $e) 
+        {
+            response_json_error($this->app, 500, $e->getMessage());
+        }
+
     }
 
     /* /1* validate username and password *1/ */

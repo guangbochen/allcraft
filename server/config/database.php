@@ -3,7 +3,7 @@ use RedBean_Facade as R;
 
 if (defined('ENVIRONMENT'))
 {
-    switch (ENVIRONMENT) { 
+    switch (ENVIRONMENT) {
         case 'development':
             // Local Mysql
             $db_host = 'localhost'; $db_name = 'allcraftDB'; $db_user = 'root'; $db_pass = 'root';

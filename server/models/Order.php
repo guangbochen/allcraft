@@ -10,9 +10,9 @@ R::$duplicationManager->setTables($schema);
 Class Order {
 
     /* this method returns list of orders */
-    public static function findAll() 
+    public static function findAll()
     {
-        $orders = R::findAll('orders');
+        $orders = R::findAll('orders', 'Order By id desc');
 
         foreach ($orders as $order) {
             Order::getCompleteOrders($order);
@@ -27,7 +27,7 @@ Class Order {
     /* this method find a list of orders in pagination */
     public static function findByPaging($firstNumber, $maxNumber)
     {
-        $orders=R::findAll('orders', 'ORDER BY id LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
+        $orders=R::findAll('orders', 'ORDER BY id desc LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
 
         foreach ($orders as $order) {
             Order::getCompleteOrders($order);
@@ -44,9 +44,7 @@ Class Order {
         $order = R::findOne('orders','id = ?', array($id));
 
         //return order if is found
-        if($order) return json_decode($order);
-
-        return null;
+        if($order) return $order;
     }
 
     // Find orders at a specific date created
@@ -57,18 +55,15 @@ Class Order {
         // The offset increases based on limit
         $orders = R::find (
             'orders', 
-            'created_at LIKE ? ORDER BY id LIMIT ?, ?', 
+            'created_at LIKE ? ORDER BY id desc LIMIT ?, ?', 
             array(
                 "%$date%", 
                 (int) $offset,
                 (int)$limit
             )
         );
-
-        if ($orders)
+        if ($orders) 
             return json_encode (R::exportAll ($orders));
-        else
-            throw new Exception ('Orders not found');
     }
 
     // Find orders before a provided date created
@@ -76,7 +71,7 @@ Class Order {
     {
         $orders = R::find (
             'orders', 
-            'DATE(created_at) < ? ORDER BY id LIMIT ?, ?',
+            'DATE(created_at) < ? ORDER BY id desc LIMIT ?, ?',
             array (
                 $date,
                 (int)$offset,
@@ -86,8 +81,6 @@ Class Order {
 
         if ($orders)
             return json_encode(R::exportAll ($orders));
-        else
-            throw new Exception ('Orders not found');
     }
 
     /* this method returns a full order with its mapped entities */
@@ -112,15 +105,21 @@ Class Order {
 
             //get the current date in yyyy_mm_dd hh:ii:ss format
             $date = date('Y-m-d H:i:s', strtotime('now'));
+
+            //get last orderNumber 
+            $lastOrder= Order::findLastOrder();
+            $lastId = (int)$lastOrder['id'];
+
             //if is an object create the object
             if(!is_array($input))
             {
-                Order::dispenseNewOrder($input, $date);
+                $orders = Order::dispenseNewOrder($input, $date, ++$lastId);
             }
-            else //is array of object
+            else //els is array of object
             {
                 foreach($input as $order) 
-                    array_push ($orders, Order::dispenseNewOrder($order, $date));
+                    array_push ($orders, Order::dispenseNewOrder($order, $date, ++$lastId));
+            }
 
             R::commit();
             return R::exportAll ($orders);
@@ -132,16 +131,28 @@ Class Order {
     }
 
     /* this method dispense new order into orders table */
-    private static function dispenseNewOrder($input, $date) 
+    private static function dispenseNewOrder($input, $date, $lastId) 
     {
         $order = R::dispense('orders');
         $order->import($input);
         $order->created_at = $date;
         $order->updated_at = $date;
+        //add auto generated unique order number
+        $orderNumber = Order::generateOrderNo($lastId);
+        $order->order_number = $orderNumber;
 
         //stores the status into order
         R::store($order);
         return $order;
+    }
+
+    /* this method generate unique order number for each order */
+    private static function generateOrderNo($id) 
+    {
+        $length = 5;
+        $number = str_pad((int)$id,$length,"0",STR_PAD_LEFT);
+        $orderNumber = 'AC'. $number;
+        return $orderNumber;
     }
 
     /* this method update the order */
@@ -160,11 +171,20 @@ Class Order {
                 R::store($order);
             }
             R::commit();
+            return $order;
         }
         catch(Exception $e) {
             R::rollback();
             throw new Exception($e->getMessage());
         }
+    }
+
+    /* find the last order */
+    public static function findLastOrder() 
+    {
+        $order = R::findLast('orders');
+        //return order if is found
+        return $order;
     }
 
 }

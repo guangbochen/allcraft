@@ -46,6 +46,10 @@ $orderImpl = new OrderImpl;
 $app->get('/orders',function() use ($orderImpl) {
     $orderImpl->findOrders();
 });
+//get order number
+$app->get('/orders/last', function() use ($orderImpl) {
+    $orderImpl->getLastOrderNumber();
+});
 //find specific order
 $app->get('/orders/:id', function($id) use ($orderImpl) {
     $orderImpl->findOrderBy($id);
@@ -64,19 +68,19 @@ $app->put('/orders/:id', function($id) use ($orderImpl) {
 /*--------------------------------*/
 $statusImpl = new StatusImpl;
 // find all status
-$app->get('/status',function() use ($statusImpl) {
+$app->get('/statuses',function() use ($statusImpl) {
     $statusImpl->findAll();
 });
 //find an status by name
-$app->get('/status/:id', function($id) use ($statusImpl) {
+$app->get('/statuses/:id', function($id) use ($statusImpl) {
     $statusImpl->findStatusBy($id);
 });
 //create an status
-$app->post('/status', function() use ($statusImpl) {
+$app->post('/statuses', function() use ($statusImpl) {
     $statusImpl->createStatus();
 });
 //update an status
-$app->put('/status/:id', function($id) use ($statusImpl) {
+$app->put('/statuses/:id', function($id) use ($statusImpl) {
     $statusImpl->updateStatus($id);
 });
 
