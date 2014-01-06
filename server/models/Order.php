@@ -14,14 +14,11 @@ Class Order {
     {
         $orders = R::findAll('orders', 'Order By id desc');
 
-        foreach ($orders as $order) {
-            Order::getCompleteOrders($order);
-        }
+        /* foreach ($orders as $order) { */
+        /*     Order::getCompleteOrders($order); */
+        /* } */
         //return json array of orders if it is found
-        if($orders) return R::exportAll($orders);
-
-        /* echo gettype($ordinary_orders); */
-        return null;
+        return R::exportAll($orders);
     }
 
     /* this method find a list of orders in pagination */
@@ -29,13 +26,11 @@ Class Order {
     {
         $orders=R::findAll('orders', 'ORDER BY id desc LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
 
-        foreach ($orders as $order) {
-            Order::getCompleteOrders($order);
-        }
+        /* foreach ($orders as $order) { */
+        /*     Order::getCompleteOrders($order); */
+        /* } */
         //return json array of orders if it is found
-        if($orders) return R::exportAll($orders);
-
-        return null;
+        return R::exportAll($orders);
     }
 
     /* find an order by id */
@@ -44,7 +39,7 @@ Class Order {
         $order = R::findOne('orders','id = ?', array($id));
 
         //return order if is found
-        if($order) return $order;
+        return $order;
     }
 
     // Find orders at a specific date created
@@ -62,8 +57,7 @@ Class Order {
                 (int)$limit
             )
         );
-        if ($orders) 
-            return json_encode (R::exportAll ($orders));
+        return json_encode (R::exportAll ($orders));
     }
 
     // Find orders before a provided date created
@@ -78,20 +72,18 @@ Class Order {
                 (int)$limit
             )
         );
-
-        if ($orders)
-            return json_encode(R::exportAll ($orders));
+        return json_encode(R::exportAll ($orders));
     }
 
     /* this method returns a full order with its mapped entities */
-    private static function getCompleteOrders($order)
-    {
-        if($order->status_id) 
-        {
-            $status = R::findOne('statuses','id = ?', array($order->status_id));
-            $order->ownStatus = $status;
-        }
-    }
+    /* private static function getCompleteOrders($order) */
+    /* { */
+    /*     if($order->status_id) */ 
+    /*     { */
+    /*         $status = R::findOne('statuses','id = ?', array($order->status_id)); */
+    /*         $order->ownStatus = $status; */
+    /*     } */
+    /* } */
 
     /* this method create new order */
     public static function createOrder($input) 
@@ -114,15 +106,17 @@ Class Order {
             if(!is_array($input))
             {
                 $orders = Order::dispenseNewOrder($input, $date, ++$lastId);
+                $orders = json_decode($orders);
             }
             else //els is array of object
             {
                 foreach($input as $order) 
                     array_push ($orders, Order::dispenseNewOrder($order, $date, ++$lastId));
+                $orders = R::exportAll ($orders);
             }
 
             R::commit();
-            return R::exportAll ($orders);
+            return $orders;
         }
         catch(Exception $e) {
             R::rollback();
@@ -185,6 +179,17 @@ Class Order {
         $order = R::findLast('orders');
         //return order if is found
         return $order;
+    }
+
+    /* this method searching orders by query */
+    public static function searchOrders($query)
+    {
+        $orders = R::findAll('orders', 
+            'order_number = ? OR status = ? OR customer = ? Order By id desc',
+            array($query, $query , $query));
+
+        //return json array of orders if it is found
+        return R::exportAll($orders);
     }
 
 }

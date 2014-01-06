@@ -64,7 +64,8 @@ class OrderImpl
     }
 
     /* create an new order */
-    public function createOrder() {
+    public function createOrder() 
+    {
         try 
         {
             $request = $this->app->request()->getBody();
@@ -82,7 +83,8 @@ class OrderImpl
      * update an eixsting order 
      * @id, order id
      */
-    public function updateOrder($id) {
+    public function updateOrder($id) 
+    {
         try 
         {
             $request = $this->app->request()->getBody();
@@ -97,7 +99,9 @@ class OrderImpl
         }
     }
 
-    public function getLastOrderNumber() {
+    /* get the last order object */
+    public function getLastOrder() 
+    {
         try 
         {
             echo Order::findLastOrder();
@@ -108,27 +112,6 @@ class OrderImpl
         }
 
     }
-
-    /* /1* validate username and password *1/ */
-    /* private function validateUserData($input) */
-    /* { */
-    /*     $username = $input['name']; */
-    /*     $password = $input['password']; */
-    /*     //check empty username and password */
-    /*     if(!$username || !$password) */ 
-    /*         throw new Exception ('empty username or password'); */
-
-    /*     //check username and password are alphanumeric */
-    /*     if(!ctype_alnum($username) || !ctype_alnum($password)) */ 
-    /*         throw new Exception ('invalid username or password'); */
-    /* } */
-
-    /* /1* check user role *1/ */
-    /* private function validateUserRole($role) */
-    /* { */
-    /*     if(!$role) */ 
-    /*         throw new Exception ('user role is undefined'); */
-    /* } */
 
 }
 

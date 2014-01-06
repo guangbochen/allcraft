@@ -3,6 +3,7 @@ require_once 'controllers/UserImpl.php';
 require_once 'controllers/OrderImpl.php';
 require_once 'controllers/StatusImpl.php';
 require_once 'controllers/PubNubImpl.php';
+require_once 'controllers/SearchImpl.php';
 
 //SET INDEX PAGE
 $app->get('/', function(){
@@ -48,7 +49,7 @@ $app->get('/orders',function() use ($orderImpl) {
 });
 //get order number
 $app->get('/orders/last', function() use ($orderImpl) {
-    $orderImpl->getLastOrderNumber();
+    $orderImpl->getLastOrder();
 });
 //find specific order
 $app->get('/orders/:id', function($id) use ($orderImpl) {
@@ -101,3 +102,11 @@ $app->post('/push',function() use ($pubNubImpl) {
     $pubNubImpl->push();
 });
 
+/*-------------------------------------------*/
+/*--------- searching orders Routes ---------*/
+/*-------------------------------------------*/
+$searchImpl = new SearchImpl;
+// find orders
+$app->get('/search',function() use ($searchImpl) {
+    $searchImpl->searchOrders();
+});
