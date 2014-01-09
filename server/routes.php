@@ -4,6 +4,7 @@ require_once 'controllers/OrderImpl.php';
 require_once 'controllers/StatusImpl.php';
 require_once 'controllers/PubNubImpl.php';
 require_once 'controllers/SearchImpl.php';
+require_once 'controllers/FilesImpl.php';
 
 //SET INDEX PAGE
 $app->get('/', function(){
@@ -110,3 +111,19 @@ $searchImpl = new SearchImpl;
 $app->get('/search',function() use ($searchImpl) {
     $searchImpl->searchOrders();
 });
+
+/*-------------------------------------------*/
+/*--------- searching orders Routes ---------*/
+/*-------------------------------------------*/
+$filesImpl = new FilesImpl;
+// upload files
+$app->post('/upload',function() use ($filesImpl) {
+    $filesImpl->uploadFiles();
+});
+$app->get('/files',function() use ($filesImpl) {
+    $filesImpl->getAllFiles();
+});
+$app->get('/files/:id',function($id) use ($filesImpl) {
+    $filesImpl->getFilesBy($id); //find files belongs to unique order number
+});
+

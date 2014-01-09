@@ -38,6 +38,16 @@ CREATE TABLE IF NOT EXISTS statuses(
     PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS files(
+    id              INTEGER NOT NULL AUTO_INCREMENT,
+    order_number    VARCHAR(255) NOT NULL,
+    name            VARCHAR(255) NOT NULL,
+    size            VARCHAR(255) NOT NULL,
+    uploaded_at     VARCHAR(255) NOT NULL,
+    download_url    VARCHAR(255) NOT NULL,
+    PRIMARY KEY(id)
+);
+
 CREATE TABLE IF NOT EXISTS orders(
     id                INTEGER NOT NULL AUTO_INCREMENT,
     status            VARCHAR(255) NULL,

@@ -3,20 +3,9 @@ require_once 'helpers/json_helper.php';
 require_once 'models/Status.php';
 
 /**
- * this is interface for user implementation
- */
-interface StatusMethods{
-    public function findAll();
-    public function findStatusBy($id);
-    public function updateStatus($id);
-    public function createStatus();
-    public function deleteStatus($id);
-}
-
-/**
  * this class implement methods that is related to users
  */
-class StatusImpl implements statusMethods {
+class StatusImpl {
     private $app;
 
     /* constructor */
