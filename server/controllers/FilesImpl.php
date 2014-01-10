@@ -10,6 +10,7 @@ require_once 'models/Files.php';
 class FilesImpl 
 {
     private $app;
+    private $root_files = 'documents/';
 
     /* constructor */
     public function __construct() 
@@ -31,11 +32,19 @@ class FilesImpl
         {
             try 
             {
+                //retertive the form order_number
+                $post = $request->post();
+                $order_number = $post['order_number'];
+
+                //create dir for each order if does not exist
+                FilesImpl::createDir($order_number);
+
                 // Handle file uploads
                 $files = UploadedFiles::handle(array(
                     /* 'root_path' => $this->container->getParameter(Configuration::PARAMETER_UPLOAD_ROOT_DIR), */
-                    'root_path' => 'img/',
-                    'param_name' => 'files'
+                    'root_path' => $this->root_files . $order_number . '/',
+                    'param_name' => 'files',
+                    'order_number' => $order_number
                 ));
                 // Return successfull response
                 response_json_data($files);
@@ -150,13 +159,26 @@ class FilesImpl
     private function getFinder ()
     {
         /* $root = $this->container->getParameter(Configuration::PARAMETER_UPLOAD_ROOT_DIR); */
-        $root = 'img/';
+        $root = 'documents/';
         /* $finder = new Finder(); */
         /* $finder->in($root); */
         /* if($dir = opendir($root)) $finder = readdir($dir); */
         $finder = scandir($root);
 
         return $finder;
+    }
+
+    /**
+     * this function create an dir upon order number
+     * @param Order number $order_number
+     */
+    private function createDir($order_number)
+    {
+        $dir = $this->root_files . $order_number . '/';
+        if (!file_exists($dir) and !is_dir($dir)) 
+        {
+            mkdir($dir, 0777);
+        }
     }
 
 }

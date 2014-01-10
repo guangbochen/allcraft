@@ -12,7 +12,7 @@ class UploadedFiles
     /**
      * Handle an upload request.
      *
-     * @throws Exception\SRozeIO\UploadHandlerBundle\Exception\
+     * @throws Exception
      * @param  array $options
      * @return array
      */

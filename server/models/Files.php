@@ -21,6 +21,10 @@ Class Files {
     public static function findFilesBy($id) {
         $files = R::findAll('files','order_number = ?', array($id));
 
+        foreach ($files as $file) {
+            $newDate = date("Y-m-d g:i a", strtotime($file->uploaded_at));
+            $file->uploaded_at = $newDate;
+        }
         //return finded files
         return R::exportAll($files);
     }
@@ -38,14 +42,14 @@ Class Files {
             $date = date('Y-m-d H:i:s', strtotime('now'));
 
             $new_file = R::dispense('files');
-            $file_path = $options['root_path'].$file['name'];
+            $file_path = '/'. $options['root_path'].$file['name'];
             $new_file->download_url = $file_path;
             $new_file->name = $file['name'];
             $size = Files::human_filesize($file['size']);
             /* $new_file->size = $file['size']; */
             $new_file->size = $size;
             $new_file->uploaded_at = $date;
-            $new_file->order_number = 'ACxxxxx';
+            $new_file->order_number = $options['order_number'];
 
             //stores the status into order
             R::store($new_file);
