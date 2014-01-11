@@ -32,7 +32,7 @@ class FilesImpl
         {
             try 
             {
-                //retertive the form order_number
+                //retertive the order_number from post form
                 $post = $request->post();
                 $order_number = $post['order_number'];
 
@@ -40,14 +40,14 @@ class FilesImpl
                 FilesImpl::createDir($order_number);
 
                 // Handle file uploads
-                $files = UploadedFiles::handle(array(
-                    /* 'root_path' => $this->container->getParameter(Configuration::PARAMETER_UPLOAD_ROOT_DIR), */
+                UploadedFiles::handle(array(
                     'root_path' => $this->root_files . $order_number . '/',
                     'param_name' => 'files',
                     'order_number' => $order_number
                 ));
-                // Return successfull response
-                response_json_data($files);
+
+                // Return updated file list
+                FilesImpl::getFilesBy($order_number);
             } 
             catch (Exception $e) {
                 response_json_error($this->app, 500, $e->getMessage());
@@ -61,7 +61,7 @@ class FilesImpl
     /**
      * List all uploaded files.
      *
-     * @Route("/files", name="file_list")
+     * @Route("/files")
      * @Method("GET")
      */
     public function getAllFiles ()
@@ -78,9 +78,9 @@ class FilesImpl
     }
 
     /**
-     * List all uploaded files.
+     * List a list of uploaded files for specific orders.
      *
-     * @Route("/files/:id", name="file_list")
+     * @Route("/files/:id")
      * @Method("GET")
      */
     public function getFilesBy ($id)
@@ -135,37 +135,6 @@ class FilesImpl
         $response->headers->set('Content-Type', mime_content_type($path));
 
         return $response;
-    }
-
-    /**
-     * Set allow origin header in response.
-     *
-     * @param  Response $response
-     * @return Response
-     */
-    private function setAllowOriginHeader (Response $response)
-    {
-        // Set the cross domain header
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        return $response;
-    }
-
-    /**
-     * Create a Finder instance to fetch the upload directory.
-     *
-     * @return Finder
-     */
-    private function getFinder ()
-    {
-        /* $root = $this->container->getParameter(Configuration::PARAMETER_UPLOAD_ROOT_DIR); */
-        $root = 'documents/';
-        /* $finder = new Finder(); */
-        /* $finder->in($root); */
-        /* if($dir = opendir($root)) $finder = readdir($dir); */
-        $finder = scandir($root);
-
-        return $finder;
     }
 
     /**
