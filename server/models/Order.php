@@ -57,6 +57,9 @@ Class Order {
                 (int)$limit
             )
         );
+
+        $orders = Order::newDateFormat($orders);
+
         return json_encode (R::exportAll ($orders));
     }
 
@@ -72,18 +75,20 @@ Class Order {
                 (int)$limit
             )
         );
+        $orders = Order::newDateFormat($orders);
+
         return json_encode(R::exportAll ($orders));
     }
 
     /* this method returns a full order with its mapped entities */
-    /* private static function getCompleteOrders($order) */
-    /* { */
-    /*     if($order->status_id) */ 
-    /*     { */
-    /*         $status = R::findOne('statuses','id = ?', array($order->status_id)); */
-    /*         $order->ownStatus = $status; */
-    /*     } */
-    /* } */
+    private static function newDateFormat($orders)
+    {
+        foreach ($orders as $order) {
+            $newDate = date("Y-m-d g:i a", strtotime($order->created_at));
+            $order->created_at = $newDate;
+        }
+        return $orders;
+    }
 
     /* this method create new order */
     public static function createOrder($input) 

@@ -3,25 +3,17 @@ require_once 'helpers/json_helper.php';
 require_once 'models/User.php';
 
 /**
- * this is interface for for UserImpl class
+ * this class implement login and basic CRUD methods of users
  */
-interface UserMethods{
-    public function findAll();
-    public function findUser($name);
-    public function updateUser();
-    public function createUser();
-    public function deleteUser();
-}
+class UserImpl {
 
-/**
- * this class implement methods that is related to users
- */
-class UserImpl implements UserMethods {
     private $app;
 
     /* constructor */
     public function __construct() {
         $this->app = \Slim\Slim::getInstance();
+        //start session to stores user info
+        session_start();
     }
 
     /* returns all users */
@@ -42,19 +34,23 @@ class UserImpl implements UserMethods {
     }
 
     /* returns an user by name */
-    public function findUser($name) {
+    public function login() {
+        $input = $this->app->request()->post();
         try 
         {
-            $user = User::findUser($name);
-            if(!$user) throw new Exception ('user not found');
+            $this->validateUserData($input);
+            $user = User::validateLogin($input['username'], $input['password']);
+            if($user === false ) throw new Exception ('invalid username or password');
 
-            //retrun an finded user
-            $user = array('user' => $user);
+            /* $_SESSION['user'] = $user; */
+            /* var_dump($_SESSION['user']); */
+
+            //retrun the  user
             response_json_data($user);
         }
         catch(Exception $e) 
         {
-            response_json_error($this->app, 500, $e->getMessage());
+            response_json_error($this->app, 401, $e->getMessage());
         }
     }
 
@@ -113,7 +109,7 @@ class UserImpl implements UserMethods {
     /* validate username and password */
     private function validateUserData($input)
     {
-        $username = $input['name'];
+        $username = $input['username'];
         $password = $input['password'];
         //check empty username and password
         if(!$username || !$password) 

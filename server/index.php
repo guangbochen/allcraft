@@ -6,10 +6,14 @@ require './vendor/autoload.php';
 
 // Load slim framework
 $app = new \Slim\Slim();
-header('Content-Type', 'application/json');
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+$app->response()->header('Content-Type', 'application/json');
+$app->response()->header('Access-Control-Allow-Origin', '*');
+$app->response()->header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+$app->response()->header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
+/* header('Content-Type', 'application/json'); */
+/* header('Access-Control-Allow-Origin: *'); */
+/* header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization"); */
+/* header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'); */
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') 
 {
@@ -21,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
     {
             $app->response->header('Access-Control-Allow-Origin: *');
             $app->response->header("Access-Control-Allow-Credentials: true");
-            $app->response->header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+            $app->response->header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
             $app->response->header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT');
             $app->response->header('Access-Control-Max-Age: 86400');
         }
@@ -64,8 +68,13 @@ if (defined('ENVIRONMENT'))
 // Config database
 require './config/database.php';
 
+// Config Security with HTTP Basic Authentication
+require './helpers/HttpBasicAuth.php';
+$app->add(new HttpBasicAuth());
+
 // Load routers
 require 'routes.php';
+
 
 $app->run();
 

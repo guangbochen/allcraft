@@ -1,4 +1,5 @@
 <?php
+require_once 'helpers/Authen.php';
 require_once 'controllers/UserImpl.php';
 require_once 'controllers/OrderImpl.php';
 require_once 'controllers/StatusImpl.php';
@@ -20,13 +21,17 @@ $app->get('/', function(){
 /*--------------------------------*/
 $userImpl = new UserImpl;
 // find all users
-$app->get('/users',function() use ($userImpl) {
+$app->get('/users', function() use ($userImpl) {
     $userImpl->findAll();
 });
-//find an user by name
-$app->get('/user/:id', function($id) use ($userImpl) {
-    $userImpl->findUser($id);
+//validate user login 
+$app->post('/login', function() use ($userImpl) {
+    $userImpl->login();
 });
+//find an user by name
+/* $app->get('/user/:id', function($id) use ($userImpl) { */
+/*     $userImpl->findUser($id); */
+/* }); */
 /* //update an user */
 /* $app->post('/user', function() use ($userImpl) { */
 /*     $userImpl->updateUser(); */
@@ -45,7 +50,7 @@ $app->get('/user/:id', function($id) use ($userImpl) {
 /*--------------------------------*/
 $orderImpl = new OrderImpl;
 // find orders
-$app->get('/orders',function() use ($orderImpl) {
+$app->get('/orders', function() use ($orderImpl) {
     $orderImpl->findOrders();
 });
 //get order number
