@@ -84,11 +84,11 @@ Class User {
     public static function validateLogin($name, $password)
     {
         $user = R::findOne('users','username = ?', array($name));
-        if(!$user) return false;
-        if(strcmp($user->password, $password) == 0) 
-            /* return json_encode($user); */
-            return true;
-        return false;
+        /* if(!$user) return false; */
+        /* if(strcmp($user->password, $password) == 0) */ 
+        return json_decode($user);
+            /* return true; */
+        /* return false; */
     }
 
 }

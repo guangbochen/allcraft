@@ -1,5 +1,6 @@
 <?php
 require_once 'helpers/json_helper.php';
+require_once 'helpers/Authen.php';
 require_once 'models/User.php';
 
 /**
@@ -12,8 +13,6 @@ class UserImpl {
     /* constructor */
     public function __construct() {
         $this->app = \Slim\Slim::getInstance();
-        //start session to stores user info
-        session_start();
     }
 
     /* returns all users */
@@ -38,12 +37,16 @@ class UserImpl {
         $input = $this->app->request()->post();
         try 
         {
+            //check whether session has already start
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            /* session_start(); // Add this to the top of the file */
             $this->validateUserData($input);
             $user = User::validateLogin($input['username'], $input['password']);
             if($user === false ) throw new Exception ('invalid username or password');
 
-            /* $_SESSION['user'] = $user; */
-            /* var_dump($_SESSION['user']); */
+            $_SESSION['user'] = $user;
 
             //retrun the  user
             response_json_data($user);

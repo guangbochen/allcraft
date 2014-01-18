@@ -21,7 +21,7 @@ $app->get('/', function(){
 /*--------------------------------*/
 $userImpl = new UserImpl;
 // find all users
-$app->get('/users', function() use ($userImpl) {
+$app->get('/users',function() use ($userImpl) {
     $userImpl->findAll();
 });
 //validate user login 
