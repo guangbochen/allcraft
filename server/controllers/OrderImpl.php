@@ -1,6 +1,8 @@
 <?php
+use RedBean_Facade as R;
 require_once 'helpers/json_helper.php';
 require_once 'models/Order.php';
+require_once 'models/Notification.php';
 
 /**
  * this class implement methods that is required to order
@@ -8,11 +10,20 @@ require_once 'models/Order.php';
 class OrderImpl 
 {
     private $app;
+    private $pubnub;
 
     /* constructor */
     public function __construct() 
     {
         $this->app = \Slim\Slim::getInstance();
+
+        //initlise PubNub 
+        $this->pubnub = new \Pubnub\Pubnub(
+            "pub-c-8021207d-c906-4f21-ac84-7d5773c9255b",  ## PUBLISH_KEY
+            "sub-c-077f7902-66ad-11e3-b1d4-02ee2ddab7fe",  ## SUBSCRIBE_KEY
+            "sec-c-Y2RjNDExZWQtMTk1YS00M2I2LWFlYmUtMzg3NjEyMjEwYTRi",  ## SECRET_KEY
+            false   ## SSL_ON?
+        );
     }
 
     /* 
@@ -70,7 +81,14 @@ class OrderImpl
         {
             $request = $this->app->request()->getBody();
             $input   = json_decode($request);
-            echo json_encode (Order::createOrder($input));
+
+            // create new orders
+            $orders = Order::createOrder($input->orders);
+
+            //create and push notification of new generated orders
+            OrderImpl::push($input, $orders);
+
+            echo json_encode($orders);
         }
         catch(Exception $e) 
         {
@@ -111,6 +129,29 @@ class OrderImpl
             response_json_error($this->app, 500, $e->getMessage());
         }
 
+    }
+
+    /* 
+     * push method generate new order notification and
+     * sends broadcast to its subscribers via Pubnub
+     */
+    private function push($input, $orders)
+    {
+        try 
+        {
+            //save notifications into database
+            $notification = Notification::createNotification($input, $orders);
+
+            // push notification to its channel's subscriber
+            $info = $this->pubnub->publish(array(
+                'channel' => 'allcraft_push_notification', ## REQUIRED Channel to Send
+                'message' => array('description' => $notification->description )   ## REQUIRED Notification String/Array
+            ));
+        }
+        catch(Exception $e) 
+        {
+            response_json_error($this->app, 500, $e->getMessage());
+        }
     }
 
 }

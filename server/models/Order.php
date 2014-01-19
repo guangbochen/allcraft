@@ -14,10 +14,7 @@ Class Order {
     {
         $orders = R::findAll('orders', 'Order By id desc');
 
-        /* foreach ($orders as $order) { */
-        /*     Order::getCompleteOrders($order); */
-        /* } */
-        //return json array of orders if it is found
+        // return founded orders
         return R::exportAll($orders);
     }
 
@@ -26,10 +23,7 @@ Class Order {
     {
         $orders=R::findAll('orders', 'ORDER BY id desc LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
 
-        /* foreach ($orders as $order) { */
-        /*     Order::getCompleteOrders($order); */
-        /* } */
-        //return json array of orders if it is found
+        //return founded orders
         return R::exportAll($orders);
     }
 
@@ -104,21 +98,14 @@ Class Order {
             $date = date('Y-m-d H:i:s', strtotime('now'));
 
             //get last orderNumber 
-            $lastOrder= Order::findLastOrder();
+            $lastOrder = R::findLast('orders');
             $lastId = (int)$lastOrder['id'];
 
-            //if is an object create the object
-            if(!is_array($input))
-            {
-                $orders = Order::dispenseNewOrder($input, $date, ++$lastId);
-                $orders = json_decode($orders);
+            //save array of orders object 
+            foreach($input as $order) {
+                array_push ($orders, Order::dispenseNewOrder($order, $date, ++$lastId));
             }
-            else //els is array of object
-            {
-                foreach($input as $order) 
-                    array_push ($orders, Order::dispenseNewOrder($order, $date, ++$lastId));
-                $orders = R::exportAll ($orders);
-            }
+            $orders = R::exportAll ($orders);
 
             R::commit();
             return $orders;
@@ -183,7 +170,12 @@ Class Order {
     {
         $order = R::findLast('orders');
         //return order if is found
-        return $order;
+        if($order) 
+            return $order;
+        else  
+            //if has no orders return 0
+            return json_encode(array('id' => 0));
+
     }
 
     /* this method searching orders by query */

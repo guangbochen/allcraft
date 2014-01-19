@@ -1,11 +1,9 @@
 <?php
 require_once 'models/Files.php';
+
 /**
  * This class is a service that will be used to handle file
  * uploads of backbone upload manager.
- *
- * @see https://github.com/sroze/backbone-upload-manager
- *
  */
 class UploadedFiles
 {

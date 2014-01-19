@@ -11,10 +11,8 @@ Class User {
 
     /* returns all users */
     public static function findAll() {
-        $users = R::findAll('users');
-
-        //return array of users if is found
-        return R::exportAll($users);
+        $users = R::getAll('select u.id, u.username, u.role from users as u');
+        return $users;
     }
     
     /* find an user by name */
@@ -84,11 +82,11 @@ Class User {
     public static function validateLogin($name, $password)
     {
         $user = R::findOne('users','username = ?', array($name));
-        /* if(!$user) return false; */
-        /* if(strcmp($user->password, $password) == 0) */ 
-        return json_decode($user);
+        if(!$user) return false;
+        if(strcmp($user->password, $password) == 0) 
+            return json_decode($user);
             /* return true; */
-        /* return false; */
+        return false;
     }
 
 }

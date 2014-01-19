@@ -3,7 +3,7 @@ require_once 'helpers/Authen.php';
 require_once 'controllers/UserImpl.php';
 require_once 'controllers/OrderImpl.php';
 require_once 'controllers/StatusImpl.php';
-require_once 'controllers/PubNubImpl.php';
+require_once 'controllers/NotificationImpl.php';
 require_once 'controllers/SearchImpl.php';
 require_once 'controllers/FilesImpl.php';
 
@@ -92,21 +92,21 @@ $app->put('/statuses/:id', function($id) use ($statusImpl) {
 });
 
 /*--------------------------------*/
-/*--------- Pubnub Routes ---------*/
+/*-----Notification Routes -------*/
 /*--------------------------------*/
-$pubNubImpl = new PubNubImpl;
+$notificationImpl = new NotificationImpl;
 //get push message 
-$app->get('/message',function() use ($pubNubImpl) {
-    $pubNubImpl->findAll();
+$app->get('/notifications',function() use ($notificationImpl) {
+    $notificationImpl->findAll();
 });
 //find an message by id
-$app->get('/message/:id', function($id) use ($pubNubImpl) {
-    $pubNubImpl->findMessage($id);
+$app->get('/notifications/:id', function($id) use ($notificationImpl) {
+    $notificationImpl->findMessage($id);
 });
 //broadcast push notification
-$app->post('/push',function() use ($pubNubImpl) {
-    $pubNubImpl->push();
-});
+/* $app->post('/push',function() use ($NotificationImpl) { */
+/*     $NotificationImpl->push(); */
+/* }); */
 
 /*-------------------------------------------*/
 /*--------- searching orders Routes ---------*/

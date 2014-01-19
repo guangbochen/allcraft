@@ -13,21 +13,22 @@ CREATE TABLE IF NOT EXISTS users(
     PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS messages(
-    id          INTEGER NOT NULL AUTO_INCREMENT,
-    username    VARCHAR(200) NOT NULL,
-    is_creator  BOOLEAN NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    created_at  TIMESTAMP NOT NULL,
+CREATE TABLE IF NOT EXISTS notifications(
+    id                 INTEGER NOT NULL AUTO_INCREMENT,
+    creator            VARCHAR(200) NOT NULL,
+    description        VARCHAR(255) NOT NULL,
+    number_of_orders   INTEGER NOT NULL,
+    created_at         TIMESTAMP NOT NULL,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS subscribers(
+CREATE TABLE IF NOT EXISTS messages(
     id          INTEGER NOT NULL AUTO_INCREMENT,
-    message_id  INTEGER NOT NULL,
+    notification_id  INTEGER NOT NULL,
     assigned_user    VARCHAR(255) NOT NULL,
+    description      VARCHAR(255) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY (message_id) REFERENCES messages(id)
+    FOREIGN KEY (notification_id) REFERENCES notifications(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -83,11 +84,11 @@ insert into statuses(status, description) values ( 'b' , 'Sells Man');
 insert into statuses(status, description) values ( 'c' , 'Customer Service');
 
 insert into users(id, firstName, lastName, userName, password, email, role) values (1, 'hook', 'creative', 'admin', 'admin', 'me.admin@email.com', 'user');
-insert into users(id, firstName, lastName, userName, password, email, role) values (2, 'hook', 'creative', 'user1', 'password', 'me.user1@email.com', 'user');
-insert into users(id, firstName, lastName, userName, password, email, role) values (3, 'hook', 'creative', 'user2', 'password', 'me.user2@email.com', 'user');
-insert into users(id, firstName, lastName, userName, password, email, role) values (4, 'hook', 'creative', 'user3', 'password', 'me.user3@email.com', 'user');
+insert into users(id, firstName, lastName, userName, password, email, role) values (2, 'hook', 'creative', 'guangboChen', 'password', 'me.user1@email.com', 'user');
+insert into users(id, firstName, lastName, userName, password, email, role) values (3, 'hook', 'creative', 'jackRobin', 'password', 'me.user2@email.com', 'user');
+insert into users(id, firstName, lastName, userName, password, email, role) values (4, 'hook', 'creative', 'joesBlog', 'password', 'me.user3@email.com', 'user');
 
-INSERT INTO orders (order_number, status,job,customer,job_title,qty,size,pp,stock,gsm,print_slide_one,print_slide_two,date_in,date_approved,date_required,job_note,inv_number,production_number,ok,despatch_by,address,booking, created_at, updated_at) VALUES ('AC00001', 'c', 'neque. Nullam nisl. Maecenas malesuada fringilla est. Mauris eu','Abbot','sit amet nulla. Donec non justo.','ac facilisis facilisis, magna tellus faucibus leo, in','elit elit fermentum risus, at fringilla purus','Nam ligula elit,','turpis. In condimentum. Donec at arcu. Vestibulum','mi. Duis risus odio, auctor vitae,','laoreet','Morbi non sapien molestie orci tincidunt adipiscing.','purus','amet ornare lectus justo eu arcu. Morbi sit amet','quis diam. Pellentesque habitant morbi tristique','Vivamus sit amet risus.','ac, fermentum vel, mauris. Integer sem elit,','congue, elit sed consequat auctor,','mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','parturient montes, nascetur ridiculus mus. Proin vel arcu','placerat. Cras dictum ultricies ligula.','at, egestas a, scelerisque sed, sapien. Nunc pulvinar arcu et', '2013-12-12 11:30:00','2013-12-12 11:30:00');
+/* INSERT INTO orders (order_number, status,job,customer,job_title,qty,size,pp,stock,gsm,print_slide_one,print_slide_two,date_in,date_approved,date_required,job_note,inv_number,production_number,ok,despatch_by,address,booking, created_at, updated_at) VALUES ('AC00001', 'c', 'neque. Nullam nisl. Maecenas malesuada fringilla est. Mauris eu','Abbot','sit amet nulla. Donec non justo.','ac facilisis facilisis, magna tellus faucibus leo, in','elit elit fermentum risus, at fringilla purus','Nam ligula elit,','turpis. In condimentum. Donec at arcu. Vestibulum','mi. Duis risus odio, auctor vitae,','laoreet','Morbi non sapien molestie orci tincidunt adipiscing.','purus','amet ornare lectus justo eu arcu. Morbi sit amet','quis diam. Pellentesque habitant morbi tristique','Vivamus sit amet risus.','ac, fermentum vel, mauris. Integer sem elit,','congue, elit sed consequat auctor,','mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','parturient montes, nascetur ridiculus mus. Proin vel arcu','placerat. Cras dictum ultricies ligula.','at, egestas a, scelerisque sed, sapien. Nunc pulvinar arcu et', '2013-12-12 11:30:00','2013-12-12 11:30:00'); */
 
 /* INSERT INTO orders (order_number, status,job,customer,job_title,qty,size,pp,stock,gsm,print_slide_one,print_slide_two,date_in,date_approved,date_required,job_note,inv_number,production_number,ok,despatch_by,address,booking, created_at, updated_at) VALUES ('order1', 'c', 'neque. Nullam nisl. Maecenas malesuada fringilla est. Mauris eu','Abbot','sit amet nulla. Donec non justo.','ac facilisis facilisis, magna tellus faucibus leo, in','elit elit fermentum risus, at fringilla purus','Nam ligula elit,','turpis. In condimentum. Donec at arcu. Vestibulum','mi. Duis risus odio, auctor vitae,','laoreet','Morbi non sapien molestie orci tincidunt adipiscing.','purus','amet ornare lectus justo eu arcu. Morbi sit amet','quis diam. Pellentesque habitant morbi tristique','Vivamus sit amet risus.','ac, fermentum vel, mauris. Integer sem elit,','congue, elit sed consequat auctor,','mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','parturient montes, nascetur ridiculus mus. Proin vel arcu','placerat. Cras dictum ultricies ligula.','at, egestas a, scelerisque sed, sapien. Nunc pulvinar arcu et', '2013-12-12 11:30:00','2013-12-12 11:30:00'); */
 /* INSERT INTO orders (order_number, status,job,customer,job_title,qty,size,pp,stock,gsm,print_slide_one,print_slide_two,date_in,date_approved,date_required,job_note,inv_number,production_number,ok,despatch_by,address,booking, created_at, updated_at) VALUES ('order1', 'b', 'neque. Nullam nisl. Maecenas malesuada fringilla est. Mauris eu','Abbot','sit amet nulla. Donec non justo.','ac facilisis facilisis, magna tellus faucibus leo, in','elit elit fermentum risus, at fringilla purus','Nam ligula elit,','turpis. In condimentum. Donec at arcu. Vestibulum','mi. Duis risus odio, auctor vitae,','laoreet','Morbi non sapien molestie orci tincidunt adipiscing.','purus','amet ornare lectus justo eu arcu. Morbi sit amet','quis diam. Pellentesque habitant morbi tristique','Vivamus sit amet risus.','ac, fermentum vel, mauris. Integer sem elit,','congue, elit sed consequat auctor,','mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','parturient montes, nascetur ridiculus mus. Proin vel arcu','placerat. Cras dictum ultricies ligula.','at, egestas a, scelerisque sed, sapien. Nunc pulvinar arcu et', '2013-12-12 11:30:00','2013-12-12 11:30:00'); */
