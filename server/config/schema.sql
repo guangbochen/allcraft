@@ -24,9 +24,12 @@ CREATE TABLE IF NOT EXISTS notifications(
 
 CREATE TABLE IF NOT EXISTS messages(
     id          INTEGER NOT NULL AUTO_INCREMENT,
-    notification_id  INTEGER NOT NULL,
-    assigned_user    VARCHAR(255) NOT NULL,
-    description      VARCHAR(255) NOT NULL,
+    notification_id INTEGER NOT NULL,
+    receiver        VARCHAR(255) NOT NULL,
+    creator         VARCHAR(255) NOT NULL,
+    description     VARCHAR(255) NOT NULL,
+    is_read         BOOLEAN,
+    created_at      TIMESTAMP NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY (notification_id) REFERENCES notifications(id)
         ON DELETE CASCADE

@@ -32,7 +32,7 @@ class NotificationImpl {
             $fields = array_to_json($params);
 
             //get request url parmameters
-            $offset = isset($fields->offset) ? $fields->offset : 1;
+            $offset = isset($fields->offset) ? $fields->offset : 0;
             $limit  = isset($fields->limit) ? $fields->limit : 10; 
             $notifications = Notification::findAll($offset, $limit);
             response_json_data($notifications);

@@ -6,6 +6,7 @@ require_once 'controllers/StatusImpl.php';
 require_once 'controllers/NotificationImpl.php';
 require_once 'controllers/SearchImpl.php';
 require_once 'controllers/FilesImpl.php';
+require_once 'controllers/MessageImpl.php';
 
 //SET INDEX PAGE
 $app->get('/', function(){
@@ -103,10 +104,6 @@ $app->get('/notifications',function() use ($notificationImpl) {
 $app->get('/notifications/:id', function($id) use ($notificationImpl) {
     $notificationImpl->findMessage($id);
 });
-//broadcast push notification
-/* $app->post('/push',function() use ($NotificationImpl) { */
-/*     $NotificationImpl->push(); */
-/* }); */
 
 /*-------------------------------------------*/
 /*--------- searching orders Routes ---------*/
@@ -118,7 +115,7 @@ $app->get('/search',function() use ($searchImpl) {
 });
 
 /*-------------------------------------------*/
-/*--------- searching orders Routes ---------*/
+/*--------- upload  files Routes ------------*/
 /*-------------------------------------------*/
 $filesImpl = new FilesImpl;
 // upload files
@@ -130,5 +127,14 @@ $app->get('/files',function() use ($filesImpl) {
 });
 $app->get('/files/:id',function($id) use ($filesImpl) {
     $filesImpl->getFilesBy($id); //find files belongs to unique order number
+});
+
+/*-------------------------------------------*/
+/*--------- upload  files Routes ------------*/
+/*-------------------------------------------*/
+$messageImpl = new MessageImpl;
+// find messsage
+$app->get('/messages',function() use ($messageImpl) {
+    $messageImpl->findByUser();
 });
 

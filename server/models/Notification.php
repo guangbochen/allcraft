@@ -15,16 +15,18 @@ Class Notification {
     {
         /* $notifications = R::findAll('notifications', 'Order by id desc'); */
         $notifications = R::findAll('notifications', 'Order by id desc LIMIT ?, ?', 
-            array((int)($offset-1), (int)$limit));
-        /* $notifications = R::findAll('notifications', 'Order by id desc LIMIT ?, ?', */ 
-        /*     array((int)1, (int)5)); */
+            array((int)$offset, (int)$limit));
+
+        $count = R::getRow('select count(id) from notifications');
+        $count = (int)$count['count(id)'];
 
         foreach ($notifications as $notification) {
             Notification::getCompleteNotification($notification);
         }
 
         //return json array of notifications if it is found
-        return R::exportAll($notifications);
+        $notifications = R::exportAll($notifications);
+        return (array('count' => $count, 'notifications' => $notifications));
     }
 
 
@@ -38,10 +40,24 @@ Class Notification {
 
         return R::exportAll($notification);
     }
+    /* this method returns a full order with its mapped entities */
+    private static function newDateFormat($orders)
+    {
+        foreach ($orders as $order) {
+            $newDate = date("Y-m-d g:i a", strtotime($order->created_at));
+            $order->created_at = $newDate;
+        }
+        return $orders;
+    }
 
     /* this method reterives a complete notifications with its owned subscribers */
     private static function getCompleteNotification($notification)
     {
+        // update time to huamn readable dateformat
+        $newDate = date("Y-m-d g:i a", strtotime($notification->created_at));
+        $notification->created_at = $newDate;
+
+        // find releated subsribers
         $subscribers = R::findAll('messages', 'notification_id = ?', array($notification->id));
         if($subscribers) {
             $notification->ownSubscribers = $subscribers;

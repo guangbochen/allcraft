@@ -22,7 +22,6 @@ Class Order {
     public static function findByPaging($firstNumber, $maxNumber)
     {
         $orders=R::findAll('orders', 'ORDER BY id desc LIMIT ?,?', array((int)($firstNumber-1), (int)$maxNumber));
-
         //return founded orders
         return R::exportAll($orders);
     }
@@ -101,13 +100,21 @@ Class Order {
             $lastOrder = R::findLast('orders');
             $lastId = (int)$lastOrder['id'];
 
-            //save array of orders object 
-            foreach($input as $order) {
-                array_push ($orders, Order::dispenseNewOrder($order, $date, ++$lastId));
+            //if is an object create the object
+            if(!is_array($input))
+            {
+                $orders = Order::dispenseNewOrder($input, $date, ++$lastId);
             }
-            $orders = R::exportAll ($orders);
+            else //is array of object
+            {
+                //save array of orders object 
+                foreach($input as $order) {
+                    array_push ($orders, Order::dispenseNewOrder($order, $date, ++$lastId));
+                }
+            }
 
             R::commit();
+            $orders = R::exportAll ($orders);
             return $orders;
         }
         catch(Exception $e) {
@@ -182,8 +189,8 @@ Class Order {
     public static function searchOrders($query)
     {
         $orders = R::findAll('orders', 
-            'order_number = ? OR status = ? OR customer = ? Order By id desc',
-            array($query, $query , $query));
+            'order_number = ? OR status = ? OR customer = ? OR id = ? Order By id desc',
+            array($query, $query , $query, $query));
 
         //return json array of orders if it is found
         return R::exportAll($orders);
