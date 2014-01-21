@@ -137,4 +137,7 @@ $messageImpl = new MessageImpl;
 $app->get('/messages',function() use ($messageImpl) {
     $messageImpl->findByUser();
 });
+$app->post('/messages/setRead',function() use ($messageImpl) {
+    $messageImpl->setAllMessagesAsRead();
+});
 

@@ -36,6 +36,32 @@ class MessageImpl {
             response_json_error($this->app, 500, $e->getMessage());
         }
     }
+
+    /**
+     * this function marks all unread message as read
+     */
+    public function setAllMessagesAsRead() {
+        try 
+        {
+            $request = $this->app->request()->getBody();
+            $input   = json_decode($request);
+
+            if(!$input) throw new Exception('empty input');
+
+            // set all messages as read
+            Message::setAllMessagesAsRead($input);
+
+            //return the latest messages after updating
+            $offset = 0; $limit = 10;
+            $messages = Message::findByUser($offset, $limit, $input->username);
+
+            echo json_encode($messages);
+        }
+        catch(Exception $e) 
+        {
+            response_json_error($this->app, 500, $e->getMessage());
+        }
+    }
 }
 
 

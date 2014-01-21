@@ -65,4 +65,27 @@ Class Message {
             }
         }
     }
+
+    public static function setAllMessagesAsRead($input)
+    {
+        R::begin();
+        try
+        {
+            $messages = R::findAll('messages','receiver = ? AND is_read = 0', array($input->username));
+            /* var_dump($messages); */
+            if($messages) {
+                foreach($messages as $message)
+                {
+                    $message->is_read = true;
+                    R::store($message);
+                }
+            }
+            R::commit();
+        }
+        catch(Exception $e) {
+            R::rollback();
+            throw new Exception($e->getMessage());
+        }
+    }
+
 }
