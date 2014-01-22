@@ -23,7 +23,7 @@ class MessageImpl {
 
             //get request url parmameters
             $offset     = isset($fields->offset) ? $fields->offset : 0;
-            $limit      = isset($fields->limit) ? $fields->limit : 10; 
+            $limit      = isset($fields->limit) ? $fields->limit : 5; 
             $receiver   = isset($fields->receiver) ? $fields->receiver : 'none'; 
 
             $messages = Message::findByUser($offset, $limit, $receiver);

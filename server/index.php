@@ -7,13 +7,13 @@ require './vendor/autoload.php';
 // Load slim framework
 $app = new \Slim\Slim();
 $app->response()->header('Content-Type', 'application/json');
-$app->response()->header('Access-Control-Allow-Origin', '*');
-$app->response()->header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-$app->response()->header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
-/* header('Content-Type', 'application/json'); */
-/* header('Access-Control-Allow-Origin: *'); */
-/* header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization"); */
-/* header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'); */
+/* $app->response()->header('Access-Control-Allow-Origin', '*'); */
+/* $app->response()->header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'); */
+/* $app->response()->header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization"); */
+header('Content-Type', 'application/json');
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') 
 {

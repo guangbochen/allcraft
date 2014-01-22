@@ -38,15 +38,15 @@ class UserImpl {
         try 
         {
             //check whether session has already start
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
+            /* if (session_status() == PHP_SESSION_NONE) { */
+            /*     session_start(); */
+            /* } */
             /* session_start(); // Add this to the top of the file */
             $this->validateUserData($input);
             $user = User::validateLogin($input['username'], $input['password']);
             if($user === false ) throw new Exception ('invalid username or password');
 
-            $_SESSION['user'] = $user;
+            /* $_SESSION['user'] = $user; */
 
             //retrun the  user
             response_json_data($user);

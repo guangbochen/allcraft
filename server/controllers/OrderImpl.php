@@ -86,7 +86,7 @@ class OrderImpl
             $orders = Order::createOrder($input->orders);
 
             //create and push notification of new generated orders
-            OrderImpl::push($input, $orders);
+            OrderImpl::pushGenerateNotification($input, $orders);
 
             echo json_encode($orders);
         }
@@ -108,8 +108,15 @@ class OrderImpl
             $request = $this->app->request()->getBody();
             $input   = json_decode($request);
             //validate user input
-            /* $this->validateUserData($input); */
-            echo Order::updateOrder($input, $id);
+            /* echo Order::updateOrder($input, $id); */
+
+            // create new orders
+            $order = Order::updateOrder($input->orders, $id);
+
+            //create and push notification of new generated orders
+            OrderImpl::pushUpdateNotification($input, $order);
+
+            echo json_encode($order);
         }
         catch(Exception $e) 
         {
@@ -135,12 +142,35 @@ class OrderImpl
      * push method generate new order notification and
      * sends broadcast to its subscribers via Pubnub
      */
-    private function push($input, $orders)
+    private function pushGenerateNotification($input, $order)
     {
         try 
         {
             //save notifications into database
-            $notification = Notification::createNotification($input, $orders);
+            $notification = Notification::createNotification($input, $order);
+
+            // push notification to its channel's subscriber
+            $info = $this->pubnub->publish(array(
+                'channel' => 'allcraft_push_notification', ## REQUIRED Channel to Send
+                'message' => array('description' => $notification->description )   ## REQUIRED Notification String/Array
+            ));
+        }
+        catch(Exception $e) 
+        {
+            response_json_error($this->app, 500, $e->getMessage());
+        }
+    }
+
+    /* 
+     * push method generate new order notification and
+     * sends broadcast to its subscribers via Pubnub
+     */
+    private function pushUpdateNotification($input, $order)
+    {
+        try 
+        {
+            //save notifications into database
+            $notification = Notification::updateNotification($input, $order);
 
             // push notification to its channel's subscriber
             $info = $this->pubnub->publish(array(
