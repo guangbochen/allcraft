@@ -86,39 +86,6 @@ Class Notification {
         }
     }
 
-    /* this method create new notification for update orders */
-    public static function updateNotification($input, $order)
-    {
-        R::begin();
-        try
-        {
-            //check input data is not empty
-            if(!$input) throw new exception("empty input data");
-
-            //get the current date in yyyy_mm_dd hh:ii:ss format
-            $date = date('Y-m-d H:i:s', strtotime('now'));
-
-            $notification = R::dispense('notifications');
-            $notification->import($input, 'creator, number_of_orders');
-            $notification->created_at = $date;
-
-            //add description to the notification
-            $desc = $input->creator . ' updated ' . $input->number_of_orders 
-                . ' order (' . $order->order_number. ') at '. $date;
-            $notification->description = $desc;
-
-            //stores notification
-            R::store($notification);
-
-            R::commit();
-            return $notification; ## return new generated notification id
-        }
-        catch(Exception $e) {
-            R::rollback();
-            throw new Exception($e->getMessage());
-        }
-    }
-
     /* this method dispense new notification and add it into database*/
     private static function dispenseNewNotification($input, $date, $orders)
     {
@@ -142,10 +109,46 @@ Class Notification {
         //stores notification
         R::store($notification);
         
-        //create new subscribers that belongs to the notification
+        //create new notification for its subscribers
         Message::newMessage($input, $notification, $firstOrder, $lastOrder, $date);
 
         return $notification;
+    }
+
+    /* this method create new notification for update orders */
+    public static function updateNotification($input, $order)
+    {
+        try
+        {
+            R::begin();
+            //check input data is not empty
+            if(!$input) throw new exception("empty input data");
+
+            //get the current date in yyyy_mm_dd hh:ii:ss format
+            $date = date('Y-m-d H:i:s', strtotime('now'));
+
+            $notification = R::dispense('notifications');
+            $notification->import($input, 'creator, number_of_orders');
+            $notification->created_at = $date;
+
+            //add description to the notification
+            $desc = $input->creator . ' updated ' . $input->number_of_orders 
+                . ' order (' . $order->order_number. ') at '. $date;
+            $notification->description = $desc;
+
+            //stores notification
+            R::store($notification);
+
+            //create new notification for its subscribers
+            Message::newMessage($input, $notification, $order, $order, $date);
+
+            R::commit();
+            return $notification; ## return new generated notification id
+        }
+        catch(Exception $e) {
+            R::rollback();
+            throw new Exception($e->getMessage());
+        }
     }
 
 }

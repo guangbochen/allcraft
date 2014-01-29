@@ -107,16 +107,14 @@ class OrderImpl
         {
             $request = $this->app->request()->getBody();
             $input   = json_decode($request);
-            //validate user input
-            /* echo Order::updateOrder($input, $id); */
 
-            // create new orders
+            // update the orders
             $order = Order::updateOrder($input->orders, $id);
 
             //create and push notification of new generated orders
             OrderImpl::pushUpdateNotification($input, $order);
 
-            echo json_encode($order);
+            echo $order;
         }
         catch(Exception $e) 
         {
@@ -129,7 +127,8 @@ class OrderImpl
     {
         try 
         {
-            echo Order::findLastOrder();
+            $order =  Order::findLastOrder();
+            echo $order;
         }
         catch(Exception $e) 
         {

@@ -23,7 +23,7 @@ class MessageImpl {
 
             //get request url parmameters
             $offset     = isset($fields->offset) ? $fields->offset : 0;
-            $limit      = isset($fields->limit) ? $fields->limit : 5; 
+            $limit      = isset($fields->limit) ? $fields->limit : 7; 
             $receiver   = isset($fields->receiver) ? $fields->receiver : 'none'; 
 
             $messages = Message::findByUser($offset, $limit, $receiver);
@@ -52,7 +52,8 @@ class MessageImpl {
             Message::setAllMessagesAsRead($input);
 
             //return the latest messages after updating
-            $offset = 0; $limit = 10;
+            $offset     = isset($input->offset) ? $input->offset : 0;
+            $limit      = isset($input->limit) ? $input->limit : 7; 
             $messages = Message::findByUser($offset, $limit, $input->username);
 
             echo json_encode($messages);
